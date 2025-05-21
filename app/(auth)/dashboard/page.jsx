@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { LogOut, Menu, X } from 'lucide-react';
 
 const teacherData = {
   name: "John Doe",
@@ -45,6 +46,7 @@ export default function TeacherDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sessions, setSessions] = useState(upcomingSessions);
   const [newSession, setNewSession] = useState({ title: "", date: "", thumbnail: "" });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleCreateSession = () => {
     if (!newSession.title || !newSession.date || !newSession.thumbnail) return;
@@ -54,50 +56,61 @@ export default function TeacherDashboard() {
     setActiveTab("dashboard");
   };
 
-  return (
-    <div className="flex h-screen  text-indigo-100 overflow-hidden">
-      {/* Sidebar */}
-      <div className="w-64  border-r border-indigo-800 flex flex-col">
-        <div className="p-6 text-center">
-          <h1 className="text-2xl font-bold text-indigo-300">SkillSphere</h1>
-          <p className="text-indigo-400 text-sm mt-1">Teacher Portal</p>
-        </div>
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
+    setSidebarOpen(false); // Close sidebar when tab is changed on mobile
+  };
 
-        <div className="flex-1 px-3 py-4">
+  return (
+    <div className="flex h-screen text-indigo-100 overflow-hidden">
+      {/* Mobile Hamburger Button */}
+      <button 
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="md:hidden fixed top-4 left-4 z-50 p-2 text-indigo-100 rounded-md border border-purple-500"
+      >
+        {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+      </button>
+
+      {/* Sidebar - Hidden on mobile by default, shown when sidebarOpen is true */}
+      <div className={`fixed md:relative md:block md:w-82 z-40 h-screen border border-purple-500 flex flex-col transition-all duration-300 transform ${
+        sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+      }  overflow-y-auto`}>
+        {/* Top section with navigation */}
+        <div className="px-3 pt-16 md:pt-20 flex-grow">
           {["dashboard", "sessions", "leaderboard"].map((key) => (
             <button
               key={key}
-              onClick={() => setActiveTab(key)}
+              onClick={() => handleTabChange(key)}
               className={`w-full text-left mb-2 px-4 py-3 rounded-md flex items-center transition ${
-                activeTab === key ? "bg-indigo-800 text-indigo-200" : "hover:bg-indigo-800/50"
+                activeTab === key ? "bg-gradient-to-r from-blue-500 to-purple-600 text-indigo-200" : "hover:bg-indigo-800/50"
               }`}
             >
-              <span className="w-5 h-5 mr-3">📌</span>
               {key.charAt(0).toUpperCase() + key.slice(1)}
             </button>
           ))}
         </div>
-
-        <div className="p-4 border-t border-indigo-800">
-          <button className="w-full text-left px-4 py-3 rounded-md flex items-center text-red-300 hover:bg-red-900/30 transition">
-            <span className="w-5 h-5 mr-3">🚪</span>
+        
+        {/* Bottom section with logout button - positioned absolutely */}
+        <div className="p-4 border-t border-purple-500 absolute bottom-0 left-0 right-0 ">
+          <button className="w-full text-left px-8 py-3 rounded-md flex items-center text-red-500 hover:bg-red-600/30 transition">
+            <LogOut className="mr-2" />
             Logout
           </button>
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 overflow-y-auto p-8">
+      {/* Main Content - Take full width on mobile */}
+      <div className="flex-1 p-4 md:p-8 pt-16 md:py-20">
         {activeTab === "dashboard" && (
           <>
             <h2 className="text-2xl font-bold mb-6 text-indigo-300">Teacher Dashboard</h2>
             {/* Profile Info */}
-            <div className=" rounded-lg p-6 shadow-md mb-8 border border-indigo-800">
+            <div className="rounded-lg p-4 md:p-6 shadow-md mb-8 border border-purple-500">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
                 <img
                   src={teacherData.profileImg}
                   alt="Profile"
-                  className="w-24 h-24 rounded-full border-2 border-indigo-500"
+                  className="w-24 h-24 rounded-full border border-purple-500"
                 />
                 <div className="flex-1">
                   <h3 className="text-xl font-bold text-indigo-300">{teacherData.name}</h3>
@@ -107,7 +120,7 @@ export default function TeacherDashboard() {
 
                   <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
                     {["Rating", "Students", "Total Sessions", "Coins Earned"].map((label, i) => (
-                      <div key={label} className="b p-3 rounded-md text-center">
+                      <div key={label} className="p-3 rounded-md text-center border border-purple-500">
                         <p className="text-2xl font-bold text-indigo-300">
                           {[teacherData.rating, teacherData.totalStudents, teacherData.totalSessions, teacherData.earnings][i]}
                         </p>
@@ -121,11 +134,11 @@ export default function TeacherDashboard() {
 
             {/* Upcoming Sessions */}
             <div className="mb-8">
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
                 <h3 className="text-xl font-bold text-indigo-300">Upcoming Sessions</h3>
                 <button
                   onClick={() => setActiveTab("sessions")}
-                  className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-500 transition"
+                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-md hover:bg-indigo-500 transition"
                 >
                   Create New Session
                 </button>
@@ -135,7 +148,7 @@ export default function TeacherDashboard() {
                 {sessions.map((session) => (
                   <div
                     key={session.id}
-                    className=" rounded-lg overflow-hidden border border-indigo-800 shadow-md"
+                    className="rounded-lg overflow-hidden border border-purple-500 shadow-md"
                   >
                     <img
                       src={session.thumbnail}
@@ -160,26 +173,26 @@ export default function TeacherDashboard() {
             <input
               type="text"
               placeholder="Session Title"
-              className="w-full p-2 mb-4  border border-indigo-700 rounded-md"
+              className="w-full p-2 mb-4 border border-purple-500 rounded-md"
               value={newSession.title}
               onChange={(e) => setNewSession({ ...newSession, title: e.target.value })}
             />
             <input
               type="date"
-              className="w-full p-2 mb-4  border border-indigo-700 rounded-md"
+              className="w-full p-2 mb-4 border border-purple-500 rounded-md"
               value={newSession.date}
               onChange={(e) => setNewSession({ ...newSession, date: e.target.value })}
             />
             <input
               type="text"
               placeholder="Thumbnail URL"
-              className="w-full p-2 mb-4  border border-indigo-700 rounded-md"
+              className="w-full p-2 mb-4 border border-purple-500 rounded-md"
               value={newSession.thumbnail}
               onChange={(e) => setNewSession({ ...newSession, thumbnail: e.target.value })}
             />
             <button
               onClick={handleCreateSession}
-              className="w-full p-2  hover:bg-indigo-500 text-white rounded-md"
+              className="w-full p-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-md"
             >
               Add Session
             </button>
@@ -190,13 +203,18 @@ export default function TeacherDashboard() {
         {activeTab === "leaderboard" && (
           <div>
             <h2 className="text-2xl font-bold mb-6 text-indigo-300">Leaderboard</h2>
-            <div className=" border border-indigo-800 rounded-lg p-4">
-              <table className="w-full text-left">
+            <div className="border border-purple-500 rounded-lg p-4 overflow-x-auto">
+              <table className="w-full text-center">
                 <thead>
-                  <tr className="text-indigo-400 border-b border-indigo-700">
+                  <tr className="text-indigo-400">
                     <th className="py-2">Rank</th>
                     <th className="py-2">Name</th>
                     <th className="py-2">Points</th>
+                  </tr>
+                  <tr>
+                    <td colSpan="3">
+                      <div className="h-0.5 bg-purple-500 w-full"></div>
+                    </td>
                   </tr>
                 </thead>
                 <tbody>
@@ -213,6 +231,14 @@ export default function TeacherDashboard() {
           </div>
         )}
       </div>
+      
+      {/* Overlay to close sidebar when clicking outside */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden" 
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
     </div>
   );
 }
