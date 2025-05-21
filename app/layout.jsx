@@ -23,13 +23,21 @@ export default function RootLayout({ children }) {
     <>
     <NavigationBar />
     <html lang="en">
+<<<<<<< HEAD
       
+=======
+   
+>>>>>>> c8297b8d80fe5a827b561eefaf25595e21e4bd63
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
       </body>
+<<<<<<< HEAD
       
+=======
+    
+>>>>>>> c8297b8d80fe5a827b561eefaf25595e21e4bd63
     </html>
     <Footer />
     </>
