@@ -2,6 +2,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavigationBar from '@/components/NavigationBar';
 import Footer from '@/components/Footer';
+import {
+  ClerkProvider,
+} from '@clerk/nextjs'
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,24 +24,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <>
-    <NavigationBar />
-    <html lang="en">
-<<<<<<< HEAD
-      
-=======
-   
->>>>>>> c8297b8d80fe5a827b561eefaf25595e21e4bd63
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-<<<<<<< HEAD
-      
-=======
-    
->>>>>>> c8297b8d80fe5a827b561eefaf25595e21e4bd63
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
+          <NavigationBar />
+          {children}
+        </body>
+      </html>
+    </ClerkProvider>
     <Footer />
     </>
   );

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Menu, X } from 'lucide-react';
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/nextjs';
 
 const NavigationBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,22 +50,18 @@ const NavigationBar = () => {
                 </Link>
               ))}
               <div className="flex space-x-3 ml-6">
-                <Link 
-                  href="/login" 
-                  className="text-white px-4 py-2 text-sm font-medium border border-purple-500 rounded-md hover:bg-purple-500/20 transition-all duration-300"
-                >
-                  Login
-                </Link>
-                <Link 
-                  href="/register" 
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-2 text-sm font-medium rounded-md transition-all duration-300"
-                >
-                  Register
-                </Link>
+                <SignedOut>
+            <SignInButton className="text-white px-4 py-2 text-sm font-medium border border-purple-500 rounded-md hover:bg-purple-500/20 transition-all duration-300" />
+          <SignUpButton className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-2 text-sm font-medium rounded-md transition-all duration-300" />
+
+                </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
               </div>
             </div>
           </div>
-          
+      
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button
@@ -96,20 +93,13 @@ const NavigationBar = () => {
               </Link>
             ))}
             <div className="flex flex-col space-y-2 mt-4 px-3 py-2">
-              <Link 
-                href="/login" 
-                className="text-white px-4 py-2 text-center text-sm font-medium border border-purple-500 rounded-md hover:bg-purple-500/20 transition-all duration-300"
-                onClick={() => setIsOpen(false)}
-              >
-                Login
-              </Link>
-              <Link 
-                href="/register" 
-                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white px-4 py-2 text-center text-sm font-medium rounded-md transition-all duration-300"
-                onClick={() => setIsOpen(false)}
-              >
-                Register
-              </Link>
+             <SignedOut>
+              <SignInButton />
+              <SignUpButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
             </div>
           </div>
         </div>
