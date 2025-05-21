@@ -1,6 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { BackgroundLines } from '@/lib/components/ui/background-lines';
 export default function RegisterToTeach() {
   const [formData, setFormData] = useState({
     name: '',
@@ -40,7 +39,7 @@ export default function RegisterToTeach() {
     
       {showConfetti && <Confetti />}
       
-      <div className="max-w-xl mx-auto relative z-10">
+      <div className="max-w-xl mx-auto relative z-10 ">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-indigo-300">Register to Teach on SkillSphere</h1>
           <p className="text-indigo-200 mt-2">Share your expertise and inspire others</p>
@@ -58,9 +57,9 @@ export default function RegisterToTeach() {
             </button>
           </div>
         ) : (
-          <div className=" bg-opacity-80 p-8 rounded-lg shadow-md space-y-5 border ">
+          <div className=" bg-opacity-80 p-8 rounded-lg shadow-md space-y-5 border border-indigo-500">
             <div className="space-y-2">
-              <label htmlFor="name" className="block text-sm font-medium text-indigo-200">Full Name</label>
+              <label htmlFor="name" className="block text-sm font-medium text-indigo-200 ">Full Name</label>
               <input
                 id="name"
                 type="text"
@@ -68,7 +67,7 @@ export default function RegisterToTeach() {
                 placeholder="Your name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full border  text-indigo-100 rounded-md p-3 "
+                className="w-full border border-indigo-500 text-indigo-100 rounded-md p-3 "
                 required
               />
             </div>
@@ -82,7 +81,7 @@ export default function RegisterToTeach() {
                 placeholder="your.email@example.com"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full border  text-indigo-100 rounded-md p-3 "
+                className="w-full border border border-indigo-500 text-indigo-100 rounded-md p-3 "
                 required
               />
             </div>
@@ -96,7 +95,7 @@ export default function RegisterToTeach() {
                 placeholder="e.g. JavaScript, Photography, Yoga"
                 value={formData.skills}
                 onChange={handleChange}
-                className="w-full border  text-indigo-100 rounded-md p-3 "
+                className="w-full border border border-indigo-500 text-indigo-100 rounded-md p-3 "
                 required
               />
             </div>
@@ -110,7 +109,7 @@ export default function RegisterToTeach() {
                 placeholder="e.g. 2 years, Professional certification"
                 value={formData.experience}
                 onChange={handleChange}
-                className="w-full border  text-indigo-100 rounded-md p-3 "
+                className="w-full border border border-indigo-500 text-indigo-100 rounded-md p-3 "
               />
             </div>
             
@@ -122,7 +121,7 @@ export default function RegisterToTeach() {
                 placeholder="What will students learn in your course?"
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full border  text-indigo-100 rounded-md p-3 "
+                className="w-full border border border-indigo-500 text-indigo-100 rounded-md p-3 "
                 rows={3}
               />
             </div>
@@ -135,7 +134,7 @@ export default function RegisterToTeach() {
                 placeholder="Share your passion for teaching"
                 value={formData.reason}
                 onChange={handleChange}
-                className="w-full border  text-indigo-100 rounded-md p-3 "
+                className="w-full  border border-indigo-500 text-indigo-100 rounded-md p-3 "
                 rows={2}
               />
             </div>
