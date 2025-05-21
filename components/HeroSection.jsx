@@ -40,7 +40,7 @@ const HeroSection = () => {
           <div className="relative h-full min-h-[300px] flex items-center justify-center">
             <div className="relative w-full max-w-md rounded-xl overflow-hidden  bg-gray-900/50 backdrop-blur-sm">
               <video
-
+                  typeof="video/mp4"
                   src="/hero-globe-dark.mp4"
                   autoPlay
                   muted
