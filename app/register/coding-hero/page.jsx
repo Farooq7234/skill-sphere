@@ -152,53 +152,6 @@ export default function RegisterToTeach() {
   );
 }
 
-// // Animated Background Component
-// function AnimatedBackground() {
-//   const bubbles = [];
-  
-//   // Create 20 animated bubbles
-//   for (let i = 0; i < 20; i++) {
-//     const size = Math.floor(Math.random() * 120) + 40; // Random size between 40-160px
-//     const startPositionX = Math.random() * 100; // Random horizontal position
-//     const startPositionY = Math.random() * 100; // Random vertical position
-//     const duration = Math.random() * 40 + 60; // Random duration between 60-100s
-//     const delay = Math.random() * -20; // Random delay
-    
-//     // Create gradient colors
-//     const opacity = Math.random() * 0.1 + 0.05; // Random opacity between 0.05-0.15
-    
-//     bubbles.push(
-//       <div 
-//         key={i}
-//         className="absolute rounded-full bg-gradient-to-r from-blue-500 to-purple-600"
-//         style={{
-//           width: `${size}px`,
-//           height: `${size}px`,
-//           left: `${startPositionX}%`,
-//           top: `${startPositionY}%`,
-//           opacity: opacity,
-//           animation: `float ${duration}s linear ${delay}s infinite`,
-//           zIndex: 1
-//         }}
-//       />
-//     );
-//   }
-
-//   return (
-//     <div className="fixed inset-0 overflow-hidden">
-//       <style jsx>{`
-//         @keyframes float {
-//           0% { transform: translate(0, 0) rotate(0deg); }
-//           33% { transform: translate(-15vw, -5vh) rotate(120deg); }
-//           66% { transform: translate(15vw, -15vh) rotate(240deg); }
-//           100% { transform: translate(0, 0) rotate(360deg); }
-//         }
-//       `}</style>
-//       {bubbles}
-//     </div>
-//   );
-// }
-
 // Confetti component
 function Confetti() {
   // Generate array of confetti pieces
