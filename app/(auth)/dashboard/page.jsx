@@ -1,8 +1,8 @@
 "use client";
 
 import { useState ,useEffect} from "react";
-import { LogOut, Menu, X, Calendar, Clock, User, Plus, Tag, Link2, Edit, Trash2, Save } from 'lucide-react';
-import { useUser } from "@clerk/nextjs";
+import { LogOut, Menu, X, Calendar, Clock, User, Plus, Tag, Link2 } from 'lucide-react';
+import { SignOutButton, useUser } from "@clerk/nextjs";
 import { databases, ID, storage } from "@/utils/appwrite";
 
 const teacherData = {
@@ -296,10 +296,12 @@ export default function TeacherDashboard() {
         
         {/* Bottom section with logout button */}
         <div className="p-4 border-t border-slate-700">
-          <button className="w-full text-left px-4 py-3 rounded-lg flex items-center text-red-400 hover:bg-red-900/20 transition-colors">
-            <LogOut className="mr-3 h-5 w-5" />
-            Logout
-          </button>
+       
+            <div className="flex items-center justify-between mb-4  text-red-400 hover:bg-red-900/20 p-2 rounded-lg"> 
+<LogOut className=" h-5 w-5" />
+            <SignOutButton className="w-full text-left px-4 py-3 rounded-lg flex items-center transition-colors">Logout</SignOutButton>
+       
+            </div>
         </div>
       </div>
 
