@@ -9,6 +9,7 @@ import {
   Radio, 
   CheckCircle 
 } from "lucide-react";
+import { databases, storage } from "@/utils/appwrite";
 
 // SessionCard Component
 const SessionCard = ({ session }) => {
@@ -24,11 +25,13 @@ const SessionCard = ({ session }) => {
     finished: "Finished"
   };
 
+  console.log(session);
+
   return (
     <div className="group flex flex-col bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-full border border-slate-700">
       <div className="relative">
         <img 
-          src={session.thumbnail} 
+          src={session.thumbnailUrl} 
           alt={session.title}
           className="w-full h-48 object-cover object-center group-hover:scale-105 transition-transform duration-500"
         />
@@ -46,19 +49,19 @@ const SessionCard = ({ session }) => {
           {session.tags.map((tag, index) => (
             <span 
               key={index} 
-              className="text-xs px-2 py-1 :bg-slate-700 text-gray-300 rounded-md"
+              className="text-xs px-2 py-1  text-white bg-green-500 rounded-md"
             >
-              #{tag}
+              {tag}
             </span>
           ))}
         </div>
         <div className="mt-auto flex items-center justify-between">
           <div className="flex items-center text-sm text-gray-400">
             <Clock className="h-4 w-4 mr-1" />
-            <span>{session.time}</span>
+            <span>{session.timeFrom} - {session.timeTo}</span>
           </div>
-          <div className="text-sm font-medium text-blue-400">
-            {session.instructor}
+          <div className="text-xs font-medium text-white px-2 py-1 bg-amber-400 rounded-lg">
+            {session?.instructor || "Instructor Name"}
           </div>
         </div>
       </div>
@@ -113,77 +116,65 @@ const SessionsPage = () => {
     duration: null,
   });
 
-  // Mock data initialization
-  useEffect(() => {
-    const fetchSessions = async () => {
-      // Simulate API fetch delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Mock session data
-      const mockSessions = [
-        {
-          id: 1,
-          title: "Introduction to AI and Machine Learning Fundamentals",
-          thumbnail: "/api/placeholder/640/360",
-          instructor: "Sarah Chen",
-          time: "45 minutes",
-          tags: ["AI", "MachineLearning", "Beginner"],
-          status: "live"
-        },
-        {
-          id: 2,
-          title: "Advanced React Patterns for Frontend Developers",
-          thumbnail: "/api/placeholder/640/360",
-          instructor: "Michael Davis",
-          time: "60 minutes",
-          tags: ["React", "JavaScript", "Frontend"],
-          status: "upcoming"
-        },
-        {
-          id: 3,
-          title: "UX Design Principles for Better User Engagement",
-          thumbnail: "/api/placeholder/640/360",
-          instructor: "Emma Wilson",
-          time: "90 minutes",
-          tags: ["Design", "UX", "UserResearch"],
-          status: "finished"
-        },
-        {
-          id: 4,
-          title: "Data Analysis with Python: From Basics to Advanced",
-          thumbnail: "/api/placeholder/640/360",
-          instructor: "Daniel Kim",
-          time: "120 minutes",
-          tags: ["Python", "DataScience", "Analytics"],
-          status: "upcoming"
-        },
-        {
-          id: 5,
-          title: "Building Your Personal Brand on Social Media",
-          thumbnail: "/api/placeholder/640/360",
-          instructor: "Jessica Taylor",
-          time: "75 minutes",
-          tags: ["Marketing", "Career", "SocialMedia"],
-          status: "live"
-        },
-        {
-          id: 6,
-          title: "Blockchain Technology and Its Real-World Applications",
-          thumbnail: "/api/placeholder/640/360",
-          instructor: "Robert Johnson",
-          time: "60 minutes",
-          tags: ["Blockchain", "Crypto", "Technology"],
-          status: "finished"
-        }
-      ];
-      
-      setSessions(mockSessions);
-      setFilteredSessions(mockSessions);
-      setIsLoading(false);
-    };
-    
-    fetchSessions();
-  }, []);
+useEffect(() => {
+  const fetchSessions = async () => {
+    // Simulate API fetch delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    try {
+      const response = await databases.listDocuments(
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
+        process.env.NEXT_PUBLIC_APPWRITE_SESSION_FORM_ID
+      );
+
+      // Fetch thumbnails for each document
+      const fetchedSessions = await Promise.all(
+        response.documents.map(async (doc) => {
+          let thumbnailUrl = '';
+
+          try {
+            // Generate thumbnail preview URL
+            if (doc.thumbnailId) {
+              thumbnailUrl = storage.getFileView(
+                process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID,
+                doc.thumbnailId
+              ).toString();
+            }
+          } catch (error) {
+            console.error(`Error fetching thumbnail for ${doc.$id}:`, error);
+          }
+
+          return {
+            id: doc.$id,
+            title: doc.title,
+            date: doc.date,
+            timeFrom: doc.timeFrom,
+            timeFromPeriod: doc.timeFromPeriod,
+            timeTo: doc.timeTo,
+            timeToPeriod: doc.timeToPeriod,
+            description: doc.description,
+            meetLink: doc.meetLink,
+            tags: doc.tags,
+            thumbnailId: doc.thumbnailId,
+            thumbnailUrl: thumbnailUrl,
+            instructor: doc.instructor,
+          };
+        })
+      );
+
+      setSessions(fetchedSessions);
+      setFilteredSessions(fetchedSessions);
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+    }
+
+    setIsLoading(false);
+  };
+
+  fetchSessions();
+}, []);
+
+console.log(sessions)
 
   // Filter sessions based on active tab, search query, and filters
   useEffect(() => {
