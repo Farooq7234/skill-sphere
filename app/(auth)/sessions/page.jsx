@@ -7,12 +7,61 @@ import {
   ChevronDown, 
   Clock, 
   Radio, 
-  CheckCircle 
+  CheckCircle,
+  X,
+  Calendar,
+  MapPin,
+  User,
+  Tag
 } from "lucide-react";
-import { databases, storage } from "@/utils/appwrite";
+import { databases, storage } from "../../../utils/appwrite";
+import SessionNavbar from '../../../components/SessionsNavbar'
 
-// SessionCard Component
-const SessionCard = ({ session }) => {
+// Session Detail Modal Component
+const SessionDetailModal = ({ session, isOpen, onClose }) => {
+  if (!isOpen || !session) return null;
+
+  // Generate Google Calendar URL
+  const generateCalendarUrl = () => {
+    const startDate = new Date(`${session.date}T${convertTo24Hour(session.timeFrom, session.timeFromPeriod)}`);
+    const endDate = new Date(`${session.date}T${convertTo24Hour(session.timeTo, session.timeToPeriod)}`);
+    
+    const formatDate = (date) => {
+      return date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    };
+
+    const params = new URLSearchParams({
+      action: 'TEMPLATE',
+      text: session.title,
+      dates: `${formatDate(startDate)}/${formatDate(endDate)}`,
+      details: `${session.description}\n\nJoin the meeting: ${session.meetLink}`,
+      location: session.meetLink,
+      sf: true,
+      output: 'xml'
+    });
+
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+  };
+
+  // Convert 12-hour to 24-hour format
+  const convertTo24Hour = (time, period) => {
+    const [hours, minutes] = time.split(':');
+    let hour24 = parseInt(hours);
+    
+    if (period === 'PM' && hour24 !== 12) {
+      hour24 += 12;
+    } else if (period === 'AM' && hour24 === 12) {
+      hour24 = 0;
+    }
+    
+    return `${hour24.toString().padStart(2, '0')}:${minutes}`;
+  };
+
+  const handleAddToCalendar = () => {
+    const calendarUrl = generateCalendarUrl();
+    window.open(calendarUrl, '_blank');
+  };
+
   const statusColors = {
     live: "bg-green-500",
     upcoming: "bg-blue-500",
@@ -25,10 +74,162 @@ const SessionCard = ({ session }) => {
     finished: "Finished"
   };
 
-  console.log(session);
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    
+      {/* Background overlay */}
+      <div 
+        className="absolute inset-0 "
+        onClick={onClose}
+      />
+
+      {/* Modal content */}
+      <div className="relative bg-slate-800 rounded-2xl border border-slate-700 shadow-2xl max-w-2xl w-full max-h-screen overflow-y-auto">
+        {/* Header with image */}
+        <div className="relative">
+          <img 
+            src={session.thumbnailUrl || "/api/placeholder/600/300"} 
+            alt={session.title}
+            className="w-full h-40 object-cover rounded-t-2xl"
+          />
+          {session.status && (
+            <span className={`absolute top-4 left-4 text-sm font-semibold text-white px-3 py-1 rounded-full ${statusColors[session.status]}`}>
+              {statusLabels[session.status]}
+            </span>
+          )}
+          <button
+            onClick={onClose}
+            className="absolute top-4 right-4 p-2 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-75 transition-colors"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-6">
+          <h2 className="text-2xl font-bold text-white mb-4">
+            {session.title}
+          </h2>
+
+          {/* Tags */}
+          {session.tags && session.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-6">
+              {session.tags.map((tag, index) => (
+                <span 
+                  key={index} 
+                  className="inline-flex items-center text-sm px-3 py-1 text-white bg-green-500 rounded-full"
+                >
+                  <Tag className="h-3 w-3 mr-1" />
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Session Info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            <div className="flex items-start text-gray-300">
+              <Clock className="h-5 w-5 mr-3 text-blue-400 mt-0.5" />
+              <div>
+                <p className="font-medium text-white">Time</p>
+                <p className="text-sm">{session.timeFrom} {session.timeFromPeriod} - {session.timeTo} {session.timeToPeriod}</p>
+              </div>
+            </div>
+
+            <div className="flex items-start text-gray-300">
+              <User className="h-5 w-5 mr-3 text-amber-400 mt-0.5" />
+              <div>
+                <p className="font-medium text-white">Instructor</p>
+                <p className="text-sm">{session.instructor || "TBA"}</p>
+              </div>
+            </div>
+
+            <div className="flex items-start text-gray-300">
+              <Calendar className="h-5 w-5 mr-3 text-purple-400 mt-0.5" />
+              <div>
+                <p className="font-medium text-white">Date</p>
+                <p className="text-sm">{new Date(session.date).toLocaleDateString('en-US', { 
+                  weekday: 'long', 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric' 
+                })}</p>
+              </div>
+            </div>
+
+            {session.meetLink && (
+              <div className="flex items-start text-gray-300">
+                <MapPin className="h-5 w-5 mr-3 text-red-400 mt-0.5" />
+                <div>
+                  <p className="font-medium text-white">Meeting Link</p>
+                  <a 
+                    href={session.meetLink} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sm text-blue-400 hover:underline break-all"
+                  >
+                    Join Meeting
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Description */}
+          <div className="mb-6">
+            <h3 className="text-lg font-semibold text-white mb-3">Description</h3>
+            <div className="text-gray-300 leading-relaxed bg-slate-700 p-4 rounded-lg">
+              {session.description || "No description available for this session."}
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <button
+              onClick={handleAddToCalendar}
+              className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            >
+              <Calendar className="h-5 w-5" />
+              Add to Google Calendar
+            </button>
+            
+            {session.meetLink && (
+              <a
+                href={session.meetLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors text-center"
+              >
+                <MapPin className="h-5 w-5" />
+                Join Meeting
+              </a>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// SessionCard Component
+const SessionCard = ({ session, onClick }) => {
+  const statusColors = {
+    live: "bg-green-500",
+    upcoming: "bg-blue-500",
+    finished: "bg-gray-500"
+  };
+
+  const statusLabels = {
+    live: "Live Now",
+    upcoming: "Coming Soon",
+    finished: "Finished"
+  };
 
   return (
-    <div className="group flex flex-col bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-full border border-slate-700">
+    <div 
+      className="group flex flex-col bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-full border border-slate-700 cursor-pointer"
+      onClick={() => onClick(session)}
+    >
       <div className="relative">
         <img 
           src={session.thumbnailUrl} 
@@ -49,7 +250,7 @@ const SessionCard = ({ session }) => {
           {session.tags.map((tag, index) => (
             <span 
               key={index} 
-              className="text-xs px-2 py-1  text-white bg-green-500 rounded-md"
+              className="text-xs px-2 py-1 text-white bg-green-500 rounded-md"
             >
               {tag}
             </span>
@@ -71,18 +272,18 @@ const SessionCard = ({ session }) => {
 
 // Sessions Loading Skeleton
 const SessionCardSkeleton = () => (
-  <div className=" bg-slate-800 rounded-xl overflow-hidden shadow-sm border border-slate-700 h-full">
-    <div className="w-full h-48  bg-slate-700 animate-pulse"></div>
+  <div className="bg-slate-800 rounded-xl overflow-hidden shadow-sm border border-slate-700 h-full">
+    <div className="w-full h-48 bg-slate-700 animate-pulse"></div>
     <div className="p-5">
-      <div className="h-6  bg-slate-700 animate-pulse rounded mb-4"></div>
+      <div className="h-6 bg-slate-700 animate-pulse rounded mb-4"></div>
       <div className="flex gap-2 mb-4">
-        <div className="h-6 w-16  bg-slate-700 animate-pulse rounded"></div>
-        <div className="h-6 w-20  bg-slate-700 animate-pulse rounded"></div>
-        <div className="h-6 w-14  bg-slate-700 animate-pulse rounded"></div>
+        <div className="h-6 w-16 bg-slate-700 animate-pulse rounded"></div>
+        <div className="h-6 w-20 bg-slate-700 animate-pulse rounded"></div>
+        <div className="h-6 w-14 bg-slate-700 animate-pulse rounded"></div>
       </div>
       <div className="flex justify-between mt-4">
-        <div className="h-4 w-24  bg-slate-700 animate-pulse rounded"></div>
-        <div className="h-4 w-20  bg-slate-700 animate-pulse rounded"></div>
+        <div className="h-4 w-24 bg-slate-700 animate-pulse rounded"></div>
+        <div className="h-4 w-20 bg-slate-700 animate-pulse rounded"></div>
       </div>
     </div>
   </div>
@@ -111,10 +312,22 @@ const SessionsPage = () => {
   const [filteredSessions, setFilteredSessions] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterOpen, setFilterOpen] = useState(false);
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState({
     categories: [],
     duration: null,
   });
+
+  const handleSessionClick = (session) => {
+    setSelectedSession(session);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedSession(null);
+  };
 
 useEffect(() => {
   const fetchSessions = async () => {
@@ -174,8 +387,6 @@ useEffect(() => {
   fetchSessions();
 }, []);
 
-console.log(sessions)
-
   // Filter sessions based on active tab, search query, and filters
   useEffect(() => {
     let filtered = [...sessions];
@@ -192,7 +403,7 @@ console.log(sessions)
         session => 
           session.title.toLowerCase().includes(query) || 
           session.tags.some(tag => tag.toLowerCase().includes(query)) ||
-          session.instructor.toLowerCase().includes(query)
+          (session.instructor && session.instructor.toLowerCase().includes(query))
       );
     }
     
@@ -251,8 +462,9 @@ console.log(sessions)
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 py-8 px-4 sm:px-6 lg:px-8 ">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-slate-900 py-8 px-4 sm:px-6 lg:px-8">
+        <SessionNavbar/>
+      <div className="max-w-7xl mx-auto ">
         <h1 className="text-3xl font-bold text-white mb-8 mt-10">Sessions</h1>
         
         {/* Search & Filter Bar */}
@@ -290,7 +502,7 @@ console.log(sessions)
                       onClick={() => toggleCategory(category)}
                       className={`px-3 py-1 rounded-full text-sm transition-colors ${
                         selectedFilters.categories.includes(category)
-                          ? "bg-blue-900/30text-blue-400"
+                          ? "bg-blue-900/30 text-blue-400"
                           : "bg-slate-700 text-gray-300"
                       }`}
                     >
@@ -333,7 +545,11 @@ console.log(sessions)
           ) : filteredSessions.length > 0 ? (
             // Show sessions
             filteredSessions.map(session => (
-              <SessionCard key={session.id} session={session} />
+              <SessionCard 
+                key={session.id} 
+                session={session} 
+                onClick={handleSessionClick}
+              />
             ))
           ) : (
             // No results
@@ -349,6 +565,13 @@ console.log(sessions)
           )}
         </div>
       </div>
+
+      {/* Session Detail Modal */}
+      <SessionDetailModal 
+        session={selectedSession}
+        isOpen={modalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 };

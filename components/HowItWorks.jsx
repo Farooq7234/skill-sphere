@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
+import { StickyScroll } from "../components/ui/sticky-scroll-reveal";
 
 const howItWorksContent = [
   {
@@ -172,7 +172,7 @@ const howItWorksContent = [
 
 const HowItWorks = () => {
   return (
-    <section className="w-full min-h-screen bg-slate-900">
+    <section id="how-it-works" className="w-full min-h-screen bg-slate-900">
       <StickyScroll content={howItWorksContent} />
     </section>
   );

@@ -3,7 +3,7 @@
 import { useState ,useEffect} from "react";
 import { LogOut, Menu, X, Calendar, Edit, User, Plus, Tag, Trash2,Link2 } from 'lucide-react';
 import { SignOutButton, useUser } from "@clerk/nextjs";
-import { databases, ID, storage } from "@/utils/appwrite";
+import { databases, ID, storage } from "../../../utils/appwrite";
 
 const teacherData = {
   name: "John Doe",

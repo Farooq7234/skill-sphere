@@ -2,11 +2,11 @@
 
 import { useEffect } from 'react';
 
-import HeroSection from '@/components/HeroSection';
-import HowItWorks from '@/components/HowItWorks';
-import Features from '@/components/Features';
-import FAQ from '@/components/FAQ';
-import NavigationBar from '@/components/NavigationBar';
+import HeroSection from '../components/HeroSection';
+import HowItWorks from '../components/HowItWorks';
+import Features from '../components/Features';
+import FAQ from '../components/FAQ';
+import NavigationBar from '../components/NavigationBar';
 
 
 // Global styles for animations and backgrounds
