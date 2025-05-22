@@ -48,7 +48,7 @@ const FAQ = () => {
       answer: "SkillSphere is a peer-to-peer learning platform where users can both teach and learn skills. It  matches users based on their skill interests, provide personalized microlearning content, and enable real-time collaboration through messaging and video calls"
     },
     {
-      question: ">Do I need to pay to use SkillSphere?",
+      question: "Do I need to pay to use SkillSphere?",
       answer: "We accept all major credit cards including Visa, Mastercard, American Express, and Discover. We also support payments via PayPal and bank transfers for annual subscriptions. Enterprise customers can opt for invoicing with net-30 payment terms."
     },
     {

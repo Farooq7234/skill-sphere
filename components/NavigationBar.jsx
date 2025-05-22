@@ -32,7 +32,8 @@ const NavigationBar = () => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
-              <span className="font-bold text-2xl bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">SKILLSPHERE</span>
+              <img src="/logo.png" alt="Logo" className="h-16 w-16  mr-2" />
+              <span className="font-sans text-2xl bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">SKILLSPHERE</span>
             </Link>
           </div>
           
@@ -43,7 +44,7 @@ const NavigationBar = () => {
                 <Link 
                   key={link.name} 
                   href={link.href}
-                  className="text-gray-300 hover:text-white px-3 py-2 text-sm font-medium relative group transition-all duration-300"
+                  className="text-gray-300 hover:text-white px-3 py-2 text-md font-medium relative group transition-all duration-300"
                 >
                   {link.name}
                   <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-400 to-purple-600 group-hover:w-full transition-all duration-300"></span>
