@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { LogOut, Menu, X } from 'lucide-react';
+import {  useUser } from "@clerk/nextjs";
 
 const teacherData = {
   name: "John Doe",
@@ -45,8 +46,24 @@ const mockLeaderboard = [
 export default function TeacherDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [sessions, setSessions] = useState(upcomingSessions);
-  const [newSession, setNewSession] = useState({ title: "", date: "", thumbnail: "" });
+  const [tagInput, setTagInput] = useState("");
+ const [newSession, setNewSession] = useState({
+  title: "",
+  date: "",
+  timeFrom: "",
+  timeFromPeriod: "AM",
+  timeTo: "",
+  timeToPeriod: "AM",
+  thumbnail: "",
+  description: "",
+  meetLink: "",
+  tags: [],
+});
+
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const {user} = useUser()
+  console.log(user)
 
   const handleCreateSession = () => {
     if (!newSession.title || !newSession.date || !newSession.thumbnail) return;
@@ -77,7 +94,7 @@ export default function TeacherDashboard() {
       }  overflow-y-auto`}>
         {/* Top section with navigation */}
         <div className="px-3 pt-16 md:pt-20 flex-grow">
-          {["dashboard", "sessions", "leaderboard"].map((key) => (
+          {["dashboard", "sessions"].map((key) => (
             <button
               key={key}
               onClick={() => handleTabChange(key)}
@@ -103,31 +120,21 @@ export default function TeacherDashboard() {
       <div className="flex-1 p-4 md:p-8 pt-16 md:py-20">
         {activeTab === "dashboard" && (
           <>
-            <h2 className="text-2xl font-bold mb-6 text-indigo-300">Teacher Dashboard</h2>
+            <h2 className="text-2xl font-bold mb-6 text-indigo-300">Community Hero Dashboard</h2>
             {/* Profile Info */}
             <div className="rounded-lg p-4 md:p-6 shadow-md mb-8 border border-purple-500">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
                 <img
-                  src={teacherData.profileImg}
+                  src={user?.imageUrl}
                   alt="Profile"
                   className="w-24 h-24 rounded-full border border-purple-500"
                 />
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold text-indigo-300">{teacherData.name}</h3>
-                  <p className="text-indigo-400 mb-2">{teacherData.email}</p>
+                  <h3 className="text-xl font-bold text-indigo-300">{user?.firstName}</h3>
+                  <p className="text-indigo-400 mb-2">{user?.primaryEmailAddress?.emailAddress}</p>
                   <p className="text-indigo-300"><span className="text-indigo-400">Skills:</span> {teacherData.skills}</p>
-                  <p className="text-indigo-300"><span className="text-indigo-400">Member since:</span> {teacherData.joinedDate}</p>
+                  <p className="text-indigo-300"><span className="text-indigo-400">Member since:</span> {user?.createdAt?.getFullYear()}</p>
 
-                  <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {["Rating", "Students", "Total Sessions", "Coins Earned"].map((label, i) => (
-                      <div key={label} className="p-3 rounded-md text-center border border-purple-500">
-                        <p className="text-2xl font-bold text-indigo-300">
-                          {[teacherData.rating, teacherData.totalStudents, teacherData.totalSessions, teacherData.earnings][i]}
-                        </p>
-                        <p className="text-xs text-indigo-400">{label}</p>
-                      </div>
-                    ))}
-                  </div>
                 </div>
               </div>
             </div>
@@ -167,40 +174,160 @@ export default function TeacherDashboard() {
         )}
 
         {/* Create Session */}
-        {activeTab === "sessions" && (
-          <div className="max-w-lg mx-auto">
-            <h2 className="text-2xl font-bold mb-6 text-indigo-300">Create New Session</h2>
-            <input
-              type="text"
-              placeholder="Session Title"
-              className="w-full p-2 mb-4 border border-purple-500 rounded-md"
-              value={newSession.title}
-              onChange={(e) => setNewSession({ ...newSession, title: e.target.value })}
-            />
-            <input
-              type="date"
-              className="w-full p-2 mb-4 border border-purple-500 rounded-md"
-              value={newSession.date}
-              onChange={(e) => setNewSession({ ...newSession, date: e.target.value })}
-            />
-            <input
-              type="text"
-              placeholder="Thumbnail URL"
-              className="w-full p-2 mb-4 border border-purple-500 rounded-md"
-              value={newSession.thumbnail}
-              onChange={(e) => setNewSession({ ...newSession, thumbnail: e.target.value })}
-            />
+        
+{activeTab === "sessions" && (
+  <div className="max-w-lg mx-auto my-auto  h-full md:h-screen">
+    <h2 className="text-2xl font-bold mb-6 text-indigo-300">Create New Session</h2>
+
+    {/* Title */}
+   
+    <input
+      type="text"
+      placeholder="Session Title"
+      className="w-full p-2 mb-4 border border-purple-500 rounded-md"
+      value={newSession.title}
+      onChange={(e) => setNewSession({ ...newSession, title: e.target.value })}
+    />
+
+    {/* Date */}
+  
+    <input
+      type="date"
+      className="w-full p-2 mb-4 border border-purple-500 rounded-md"
+      value={newSession.date}
+      onChange={(e) => setNewSession({ ...newSession, date: e.target.value })}
+    />
+
+   
+{/* Time From */}
+
+<div className="flex gap-2 mb-4">
+  <input
+    type="time"
+    className="w-full border border-purple-500 rounded-md p-2"
+    value={newSession.timeFrom || ""}
+    onChange={(e) => setNewSession({ ...newSession, timeFrom: e.target.value })}
+  />
+  <select
+    className="border border-purple-500 rounded-md p-2"
+    value={newSession.timeFromPeriod || "AM"}
+    onChange={(e) => setNewSession({ ...newSession, timeFromPeriod: e.target.value })}
+  >
+    <option value="AM">AM</option>
+    <option value="PM">PM</option>
+  </select>
+</div>
+
+{/* Time To */}
+
+<div className="flex gap-2 mb-4">
+  <input
+    type="time"
+    className="w-full border border-purple-500 rounded-md p-2"
+    value={newSession.timeTo || ""}
+    onChange={(e) => setNewSession({ ...newSession, timeTo: e.target.value })}
+  />
+  <select
+    className="border border-purple-500 rounded-md p-2"
+    value={newSession.timeToPeriod || "AM"}
+    onChange={(e) => setNewSession({ ...newSession, timeToPeriod: e.target.value })}
+  >
+    <option value="AM">AM</option>
+    <option value="PM">PM</option>
+  </select>
+</div>
+
+  
+
+     {/* Thumbnail Upload */}
+    <input
+      type="file"
+      accept="image/*"
+      className="w-full p-2 mb-4 border border-purple-500 rounded-md"
+      onChange={(e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setNewSession({ ...newSession, thumbnail: reader.result });
+          };
+          reader.readAsDataURL(file);
+        }
+      }}
+    />
+
+    {/* Description */}
+    <textarea
+      placeholder="Session Description"
+      className="w-full p-2 mb-4 border border-purple-500 rounded-md"
+      value={newSession.description || ""}
+      onChange={(e) => setNewSession({ ...newSession, description: e.target.value })}
+    />
+
+    {/* Google Meet Link */}
+    <input
+      type="url"
+      placeholder="Google Meet Link"
+      className="w-full p-2 mb-4 border border-purple-500 rounded-md"
+      value={newSession.meetLink || ""}
+      onChange={(e) => setNewSession({ ...newSession, meetLink: e.target.value })}
+    />
+
+    {/* Tags Input */}
+    <div className="w-full p-2 mb-4 border border-purple-500 rounded-md">
+      <input
+        type="text"
+        placeholder="Add a tag and press Enter"
+        className="w-full mb-2 outline-none"
+        value={tagInput}
+        onChange={(e) => setTagInput(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" && tagInput.trim() !== "") {
+            e.preventDefault();
+            setNewSession({
+              ...newSession,    
+              tags: [...(newSession.tags || []), tagInput.trim()],
+            });
+            setTagInput("");
+          }
+        }}
+      />
+      <div className="flex flex-wrap gap-2">
+        {(newSession.tags || []).map((tag, index) => (
+          <span
+            key={index}
+            className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm flex items-center"
+          >
+            {tag}
             <button
-              onClick={handleCreateSession}
-              className="w-full p-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-md"
+              onClick={() =>
+                setNewSession({
+                  ...newSession,
+                  tags: newSession.tags.filter((_, i) => i !== index),
+                })
+              }
+              className="ml-2 text-white hover:text-red-300"
             >
-              Add Session
+              ×
             </button>
-          </div>
-        )}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    {/* Submit Button */}
+    <button
+      onClick={handleCreateSession}
+      className="w-full p-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-md"
+    >
+      Add Session
+    </button>
+  </div>
+)}
+
 
         {/* Leaderboard */}
-        {activeTab === "leaderboard" && (
+        {/* {activeTab === "leaderboard" && (
           <div>
             <h2 className="text-2xl font-bold mb-6 text-indigo-300">Leaderboard</h2>
             <div className="border border-purple-500 rounded-lg p-4 overflow-x-auto">
@@ -229,7 +356,7 @@ export default function TeacherDashboard() {
               </table>
             </div>
           </div>
-        )}
+        )} */}
       </div>
       
       {/* Overlay to close sidebar when clicking outside */}
