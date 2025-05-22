@@ -57,32 +57,32 @@ const Features = () => {
     {
       icon: <Handshake className="h-6 w-6 text-blue-400" />,
       title: "Peer-to-Peer Skill Exchange",
-      description: "Connect with other learners and teachers to trade skills in a mutually beneficial way.",
+      description: "Connect with other learners and mentors to trade skills in a mutually beneficial way.",
     },
     {
       icon: <Cpu className="h-6 w-6 text-purple-400" />,
       title: "Community Knowledge Sharing",
-      description: "Engage in forums, Q&A, and share short video tutorials with peers.",
+      description: "Engage in tutorials online meets with peers.",
     },
     {
       icon: <Dices className="h-6 w-6 text-blue-400" />,
-      title: "Gamification & Trust Building",
-      description: "Earn badges, get endorsements, and showcase verified skill certificates.",
+      title: "Trust Building",
+      description: "Showcase your skills and build trust with others through verified profiles and endorsements.",
     },
     {
       icon: <Calendar1 className="h-6 w-6 text-purple-400" />,
       title: "Flexible Scheduling & Calendar Integration",
-      description: "Easily book, reschedule, and manage skill exchange sessions with built-in calendar syncing.",
+      description: "Easily book, reschedule, and manage skill exchange sessions with google calendar syncing.",
     },
     {
       icon: <Smartphone className="h-6 w-6 text-blue-400" />,
-      title: "Skill Endorsements & Peer Reviews",
-      description: "Build your credibility through feedback and endorsements from fellow learners.",
+      title: "Skill Endorsements ",
+      description: "Build your credibility through sessions and endorsements from fellow learners.",
     },
     {
       icon: <Sparkles className="h-6 w-6 text-purple-400" />,
-      title: "Learning Streaks",
-      description: "Learn daily  for consistent learning, keeping motivation high.",
+      title: "Learning Becomes a Habit",
+      description: "Through our sessions, you can make learning a daily habit and improve your skills consistently.",
     },
   ];
 
@@ -97,11 +97,11 @@ const Features = () => {
       <div className="container mx-auto px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            <span className="bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">Powerful Features</span>
+            <span className="bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">Features</span>
           </h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
-            Discover the tools and capabilities that make our platform stand out from the competition.
-            Built with modern technologies to power your digital transformation.
+            Discover the unique features that make our platform the best place to learn and grow your skills. 
+            From peer-to-peer exchanges to flexible scheduling, we have everything you need to succeed.
           </p>
         </div>
         
