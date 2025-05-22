@@ -1,7 +1,7 @@
 "use client";
 
 import { useState ,useEffect} from "react";
-import { LogOut, Menu, X, Calendar, Clock, User, Plus, Tag, Link2 } from 'lucide-react';
+import { LogOut, Menu, X, Calendar, Clock, User, Plus, Tag, Link2, Edit, Trash2 } from 'lucide-react';
 import { SignOutButton, useUser } from "@clerk/nextjs";
 import { databases, ID, storage } from "@/utils/appwrite";
 
