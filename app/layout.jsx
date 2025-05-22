@@ -28,9 +28,7 @@ export default function RootLayout({ children }) {
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-          <NavigationBar />
-          {children}
+        >          {children}
         </body>
       </html>
     </ClerkProvider>

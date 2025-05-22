@@ -6,6 +6,7 @@ import HeroSection from '@/components/HeroSection';
 import HowItWorks from '@/components/HowItWorks';
 import Features from '@/components/Features';
 import FAQ from '@/components/FAQ';
+import NavigationBar from '@/components/NavigationBar';
 
 
 // Global styles for animations and backgrounds
@@ -104,7 +105,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col bg-slate-900 text-white">
-
+          <NavigationBar />
       <HeroSection />
       <HowItWorks />
       <Features />
