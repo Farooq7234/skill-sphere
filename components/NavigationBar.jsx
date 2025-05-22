@@ -33,7 +33,7 @@ const NavigationBar = () => {
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center">
               <img src="/logo.png" alt="Logo" className="h-16 w-16  mr-2" />
-              <span className="font-sans text-2xl bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">SKILLSPHERE</span>
+              <span className="font-sans text-xl bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">SkillSphere</span>
             </Link>
           </div>
           
