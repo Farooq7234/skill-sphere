@@ -88,7 +88,7 @@ export const StickyScroll = ({ content, contentClassName }) => {
           {/* Left scrollable text */}
           <div
             ref={scrollContainerRef}
-            className="flex-1 overflow-y-auto scrollbar-hide h-[70vh] pr-6 scroll-smooth scrollbar-hide"
+            className="flex-1 overflow-y-auto scrollbar-hide h-[70vh] pr-6 scroll-smooth"
             style={{
               scrollbarWidth: 'thin',
               scrollbarColor: '#475569 transparent'
