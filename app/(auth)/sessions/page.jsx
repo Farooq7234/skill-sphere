@@ -1,9 +1,365 @@
-import React from 'react'
+"use client";
 
-const Sessions = () => {
+import { useState, useEffect } from "react";
+import { 
+  Search, 
+  Filter, 
+  ChevronDown, 
+  Clock, 
+  Radio, 
+  CheckCircle 
+} from "lucide-react";
+
+// SessionCard Component
+const SessionCard = ({ session }) => {
+  const statusColors = {
+    live: "bg-green-500",
+    upcoming: "bg-blue-500",
+    finished: "bg-gray-500"
+  };
+
+  const statusLabels = {
+    live: "Live Now",
+    upcoming: "Coming Soon",
+    finished: "Finished"
+  };
+
   return (
-    <div>Sessions</div>
-  )
-}
+    <div className="group flex flex-col bg-slate-800 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 h-full border border-slate-700">
+      <div className="relative">
+        <img 
+          src={session.thumbnail} 
+          alt={session.title}
+          className="w-full h-48 object-cover object-center group-hover:scale-105 transition-transform duration-500"
+        />
+        {session.status && (
+          <span className={`absolute top-3 left-3 text-xs font-semibold text-white px-3 py-1 rounded-full ${statusColors[session.status]}`}>
+            {statusLabels[session.status]}
+          </span>
+        )}
+      </div>
+      <div className="flex flex-col p-5 flex-grow">
+        <h3 className="text-lg font-semibold text-white mb-2 line-clamp-2">
+          {session.title}
+        </h3>
+        <div className="flex flex-wrap gap-2 mb-4">
+          {session.tags.map((tag, index) => (
+            <span 
+              key={index} 
+              className="text-xs px-2 py-1 :bg-slate-700 text-gray-300 rounded-md"
+            >
+              #{tag}
+            </span>
+          ))}
+        </div>
+        <div className="mt-auto flex items-center justify-between">
+          <div className="flex items-center text-sm text-gray-400">
+            <Clock className="h-4 w-4 mr-1" />
+            <span>{session.time}</span>
+          </div>
+          <div className="text-sm font-medium text-blue-400">
+            {session.instructor}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-export default Sessions
+// Sessions Loading Skeleton
+const SessionCardSkeleton = () => (
+  <div className=" bg-slate-800 rounded-xl overflow-hidden shadow-sm border border-slate-700 h-full">
+    <div className="w-full h-48  bg-slate-700 animate-pulse"></div>
+    <div className="p-5">
+      <div className="h-6  bg-slate-700 animate-pulse rounded mb-4"></div>
+      <div className="flex gap-2 mb-4">
+        <div className="h-6 w-16  bg-slate-700 animate-pulse rounded"></div>
+        <div className="h-6 w-20  bg-slate-700 animate-pulse rounded"></div>
+        <div className="h-6 w-14  bg-slate-700 animate-pulse rounded"></div>
+      </div>
+      <div className="flex justify-between mt-4">
+        <div className="h-4 w-24  bg-slate-700 animate-pulse rounded"></div>
+        <div className="h-4 w-20  bg-slate-700 animate-pulse rounded"></div>
+      </div>
+    </div>
+  </div>
+);
+
+// Tab Button Component
+const TabButton = ({ active, icon, label, onClick }) => (
+  <button
+    onClick={onClick}
+    className={`flex items-center px-4 py-3 rounded-lg transition-all duration-300 ${
+      active 
+        ? "bg-blue-900/30 text-blue-400 font-medium" 
+        : "text-gray-300 hover:bg-slate-700/50"
+    }`}
+  >
+    {icon}
+    <span className="ml-2">{label}</span>
+  </button>
+);
+
+// Main Sessions Page Component
+const SessionsPage = () => {
+  const [activeTab, setActiveTab] = useState("all");
+  const [isLoading, setIsLoading] = useState(true);
+  const [sessions, setSessions] = useState([]);
+  const [filteredSessions, setFilteredSessions] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [selectedFilters, setSelectedFilters] = useState({
+    categories: [],
+    duration: null,
+  });
+
+  // Mock data initialization
+  useEffect(() => {
+    const fetchSessions = async () => {
+      // Simulate API fetch delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Mock session data
+      const mockSessions = [
+        {
+          id: 1,
+          title: "Introduction to AI and Machine Learning Fundamentals",
+          thumbnail: "/api/placeholder/640/360",
+          instructor: "Sarah Chen",
+          time: "45 minutes",
+          tags: ["AI", "MachineLearning", "Beginner"],
+          status: "live"
+        },
+        {
+          id: 2,
+          title: "Advanced React Patterns for Frontend Developers",
+          thumbnail: "/api/placeholder/640/360",
+          instructor: "Michael Davis",
+          time: "60 minutes",
+          tags: ["React", "JavaScript", "Frontend"],
+          status: "upcoming"
+        },
+        {
+          id: 3,
+          title: "UX Design Principles for Better User Engagement",
+          thumbnail: "/api/placeholder/640/360",
+          instructor: "Emma Wilson",
+          time: "90 minutes",
+          tags: ["Design", "UX", "UserResearch"],
+          status: "finished"
+        },
+        {
+          id: 4,
+          title: "Data Analysis with Python: From Basics to Advanced",
+          thumbnail: "/api/placeholder/640/360",
+          instructor: "Daniel Kim",
+          time: "120 minutes",
+          tags: ["Python", "DataScience", "Analytics"],
+          status: "upcoming"
+        },
+        {
+          id: 5,
+          title: "Building Your Personal Brand on Social Media",
+          thumbnail: "/api/placeholder/640/360",
+          instructor: "Jessica Taylor",
+          time: "75 minutes",
+          tags: ["Marketing", "Career", "SocialMedia"],
+          status: "live"
+        },
+        {
+          id: 6,
+          title: "Blockchain Technology and Its Real-World Applications",
+          thumbnail: "/api/placeholder/640/360",
+          instructor: "Robert Johnson",
+          time: "60 minutes",
+          tags: ["Blockchain", "Crypto", "Technology"],
+          status: "finished"
+        }
+      ];
+      
+      setSessions(mockSessions);
+      setFilteredSessions(mockSessions);
+      setIsLoading(false);
+    };
+    
+    fetchSessions();
+  }, []);
+
+  // Filter sessions based on active tab, search query, and filters
+  useEffect(() => {
+    let filtered = [...sessions];
+    
+    // Filter by tab
+    if (activeTab !== "all") {
+      filtered = filtered.filter(session => session.status === activeTab);
+    }
+    
+    // Filter by search query
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(
+        session => 
+          session.title.toLowerCase().includes(query) || 
+          session.tags.some(tag => tag.toLowerCase().includes(query)) ||
+          session.instructor.toLowerCase().includes(query)
+      );
+    }
+    
+    // Apply category filters
+    if (selectedFilters.categories.length > 0) {
+      filtered = filtered.filter(
+        session => session.tags.some(tag => selectedFilters.categories.includes(tag))
+      );
+    }
+    
+    // Apply duration filter
+    if (selectedFilters.duration) {
+      // This would be implemented based on your duration filtering logic
+      // Example: filtered = filtered.filter(session => ...);
+    }
+    
+    setFilteredSessions(filtered);
+  }, [activeTab, searchQuery, selectedFilters, sessions]);
+
+  // Tab configuration
+  const tabs = [
+    { 
+      id: "all", 
+      label: "All Sessions", 
+      icon: <Radio className="h-5 w-5" />
+    },
+    { 
+      id: "live", 
+      label: "Live Now", 
+      icon: <Radio className="h-5 w-5 text-green-500" />
+    },
+    { 
+      id: "upcoming", 
+      label: "Upcoming", 
+      icon: <Clock className="h-5 w-5 text-blue-500" />
+    },
+    { 
+      id: "finished", 
+      label: "Finished", 
+      icon: <CheckCircle className="h-5 w-5 text-gray-500" />
+    }
+  ];
+
+  // Filter options
+  const filterCategories = ["AI", "Design", "Frontend", "Backend", "Career", "DataScience", "Marketing", "UX"];
+
+  // Toggle filter category
+  const toggleCategory = (category) => {
+    setSelectedFilters(prev => {
+      const categories = prev.categories.includes(category)
+        ? prev.categories.filter(c => c !== category)
+        : [...prev.categories, category];
+        
+      return { ...prev, categories };
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-slate-900 py-8 px-4 sm:px-6 lg:px-8 ">
+      <div className="max-w-7xl mx-auto">
+        <h1 className="text-3xl font-bold text-white mb-8 mt-10">Sessions</h1>
+        
+        {/* Search & Filter Bar */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+          <div className="flex-1 relative">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search className="h-5 w-5 text-gray-400" />
+            </div>
+            <input
+              type="text"
+              placeholder="Search sessions, topics, or instructors..."
+              className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-lg bg-slate-800 text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          
+          <div className="relative">
+            <button
+              onClick={() => setFilterOpen(!filterOpen)}
+              className="w-full sm:w-auto flex items-center justify-center gap-2 bg-slate-800 border border-slate-700 rounded-lg px-4 py-3 text-gray-200 hover:bg-slate-700 transition-colors"
+            >
+              <Filter className="h-5 w-5" />
+              <span>Filters</span>
+              <ChevronDown className={`h-4 w-4 transition-transform duration-300 ${filterOpen ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {filterOpen && (
+              <div className="absolute right-0 mt-2 w-72 bg-slate-800 rounded-lg shadow-lg border border-slate-700 z-20 p-4">
+                <h3 className="font-medium text-white mb-3">Categories</h3>
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {filterCategories.map(category => (
+                    <button
+                      key={category}
+                      onClick={() => toggleCategory(category)}
+                      className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                        selectedFilters.categories.includes(category)
+                          ? "bg-blue-900/30text-blue-400"
+                          : "bg-slate-700 text-gray-300"
+                      }`}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+                
+                <div className="border-t border-slate-700 pt-3 flex justify-end">
+                  <button
+                    onClick={() => setSelectedFilters({ categories: [], duration: null })}
+                    className="text-sm text-blue-400 hover:underline"
+                  >
+                    Clear all filters
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        
+        {/* Navigation Tabs */}
+        <div className="flex flex-wrap gap-2 mb-8 bg-slate-800 p-2 rounded-lg shadow-sm border border-slate-700">
+          {tabs.map(tab => (
+            <TabButton
+              key={tab.id}
+              active={activeTab === tab.id}
+              icon={tab.icon}
+              label={tab.label}
+              onClick={() => setActiveTab(tab.id)}
+            />
+          ))}
+        </div>
+        
+        {/* Sessions Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {isLoading ? (
+            // Show skeletons while loading
+            Array(6).fill(0).map((_, index) => <SessionCardSkeleton key={index} />)
+          ) : filteredSessions.length > 0 ? (
+            // Show sessions
+            filteredSessions.map(session => (
+              <SessionCard key={session.id} session={session} />
+            ))
+          ) : (
+            // No results
+            <div className="col-span-full flex flex-col items-center justify-center py-12 text-center">
+              <div className="bg-slate-700 rounded-full p-6 mb-4">
+                <Search className="h-10 w-10 text-gray-400" />
+              </div>
+              <h3 className="text-xl font-medium text-white mb-2">No sessions found</h3>
+              <p className="text-gray-400 max-w-md">
+                We couldn't find any sessions matching your criteria. Try adjusting your filters or search query.
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SessionsPage;
