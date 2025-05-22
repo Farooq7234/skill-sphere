@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
-import { databases, ID } from '@/utils/appwrite';
+import { databases, ID } from '../../utils/appwrite';
 import Link from 'next/link';
 
 export default function RegisterToTeach() {
