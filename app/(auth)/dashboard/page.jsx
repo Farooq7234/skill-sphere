@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { LogOut, Menu, X } from 'lucide-react';
 import {  useUser } from "@clerk/nextjs";
+import { databases, ID, storage } from "@/utils/appwrite";
 
 const teacherData = {
   name: "John Doe",
@@ -63,20 +64,46 @@ export default function TeacherDashboard() {
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const {user} = useUser()
-  console.log(user)
 
-  const handleCreateSession = () => {
-    if (!newSession.title || !newSession.date || !newSession.thumbnail) return;
-    const newId = sessions.length + 1;
-    setSessions([...sessions, { id: newId, ...newSession }]);
-    setNewSession({ title: "", date: "", thumbnail: "" });
-    setActiveTab("dashboard");
-  };
+ const handleCreateSession = async () => {
+  try {
+    let thumbnailFileId = "";
 
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
-    setSidebarOpen(false); // Close sidebar when tab is changed on mobile
-  };
+    // Upload file to Appwrite bucket if thumbnail is present
+    if (newSession.thumbnail) {
+      const uploadedFile = await storage.createFile(
+        process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID,             // ✅ replace with your bucket ID
+        ID.unique(),
+        newSession.thumbnail           // ✅ this must be a File object
+      );
+      thumbnailFileId = uploadedFile.$id;
+    }
+
+    // Store session data in Appwrite Database
+    await databases.createDocument(
+      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,             // ✅ replace with your DB ID
+      process.env.NEXT_PUBLIC_APPWRITE_SESSION_FORM_ID,           // ✅ replace with your Collection ID
+      ID.unique(),
+      {
+        title: newSession.title,
+        date: newSession.date,
+        timeFrom: newSession.timeFrom,
+        timeFromPeriod: newSession.timeFromPeriod,
+        timeTo: newSession.timeTo,
+        timeToPeriod: newSession.timeToPeriod,
+        description: newSession.description,
+        meetLink: newSession.meetLink,
+        tags: newSession.tags || [],
+        thumbnailId: thumbnailFileId     // ✅ store file ID
+      }
+    );
+
+    alert("Session created successfully!");
+  } catch (error) {
+    console.error("Error creating session:", error);
+    alert("Error creating session. Check console for details.");
+  }
+};
 
   return (
     <div className="flex h-screen text-indigo-100 overflow-hidden">
@@ -249,7 +276,7 @@ export default function TeacherDashboard() {
         if (file) {
           const reader = new FileReader();
           reader.onloadend = () => {
-            setNewSession({ ...newSession, thumbnail: reader.result });
+            setNewSession({ ...newSession, thumbnail: file });
           };
           reader.readAsDataURL(file);
         }
