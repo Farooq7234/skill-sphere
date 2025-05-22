@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import { LogOut, Menu, X, Calendar, Clock, User, Plus, Tag, Link2 } from 'lucide-react';
 import { useUser } from "@clerk/nextjs";
 import { databases, ID, storage } from "@/utils/appwrite";
@@ -17,31 +17,17 @@ const teacherData = {
   profileImg: "/profile.jpg",
 };
 
-const upcomingSessions = [
-  {
-    id: 1,
-    title: "Intro to React",
-    date: "2025-06-01",
-    thumbnail: "/api/placeholder/640/360",
-  },
-  {
-    id: 2,
-    title: "Advanced JavaScript",
-    date: "2025-06-05",
-    thumbnail: "/api/placeholder/640/360",
-  },
-  {
-    id: 3,
-    title: "Node.js API Building",
-    date: "2025-06-10",
-    thumbnail: "/api/placeholder/640/360",
-  },
-];
+
+
 
 
 
 export default function TeacherDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const databaseId = process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID;
+  const collectionId = process.env.NEXT_PUBLIC_APPWRITE_SESSION_FORM_ID;
+  const bucketId = process.env.NEXT_PUBLIC_APPWRITE_BUCKET_ID;
+  const [upcomingSessions, setUpcomingSessions] = useState([]);
   const [sessions, setSessions] = useState(upcomingSessions);
   const [tagInput, setTagInput] = useState("");
   const [newSession, setNewSession] = useState({
@@ -63,6 +49,32 @@ export default function TeacherDashboard() {
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     setSidebarOpen(false); // Close sidebar on mobile after selection
+  };
+
+    // Fetch sessions from Appwrite
+  useEffect(() => {
+    const fetchSessions = async () => {
+      try {
+        const res = await databases.listDocuments(databaseId, collectionId);
+        setUpcomingSessions(res.documents); // Each contains $id
+      } catch (err) {
+        console.error("Error fetching sessions:", err);
+      }
+    };
+    fetchSessions();
+  }, []);
+
+   // Handle Delete
+  const handleDelete = async (sessionId, imageFileId) => {
+    try {
+      await databases.deleteDocument(databaseId, collectionId, sessionId);
+      if (imageFileId) {
+        await storage.deleteFile(bucketId, imageFileId);
+      }
+      setUpcomingSessions((prev) => prev.filter((s) => s.$id !== sessionId));
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
   };
 
   const handleCreateSession = async () => {
@@ -94,7 +106,9 @@ export default function TeacherDashboard() {
           description: newSession.description,
           meetLink: newSession.meetLink,
           tags: newSession.tags || [],
-          thumbnailId: thumbnailFileId
+          thumbnailId: thumbnailFileId,
+          userId:user.id,
+          instructor:user.fullName
         }
       );
 
@@ -118,6 +132,8 @@ export default function TeacherDashboard() {
       alert("Error creating session. Check console for details.");
     }
   };
+
+
 
   return (
     <div className="flex h-screen bg-slate-900 text-white overflow-hidden">
@@ -244,6 +260,20 @@ export default function TeacherDashboard() {
                         <span>{session.date}</span>
                       </div>
                     </div>
+                      <div className="flex gap-2 mt-auto">
+            <button
+              onClick={() => handleDelete(session.$id, session.imageFileId)}
+              className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            >
+              Delete
+            </button>
+            <button
+              onClick={() => console.log("Edit session:", session)}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Edit
+            </button>
+          </div>
                   </div>
                 ))}
               </div>
