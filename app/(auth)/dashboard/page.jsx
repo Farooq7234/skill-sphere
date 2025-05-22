@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { LogOut, Menu, X } from 'lucide-react';
+import {  useUser } from "@clerk/nextjs";
 
 const teacherData = {
   name: "John Doe",
@@ -47,6 +48,8 @@ export default function TeacherDashboard() {
   const [sessions, setSessions] = useState(upcomingSessions);
   const [newSession, setNewSession] = useState({ title: "", date: "", thumbnail: "" });
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const {user} = useUser()
+  console.log(user)
 
   const handleCreateSession = () => {
     if (!newSession.title || !newSession.date || !newSession.thumbnail) return;
@@ -103,31 +106,21 @@ export default function TeacherDashboard() {
       <div className="flex-1 p-4 md:p-8 pt-16 md:py-20">
         {activeTab === "dashboard" && (
           <>
-            <h2 className="text-2xl font-bold mb-6 text-indigo-300">Teacher Dashboard</h2>
+            <h2 className="text-2xl font-bold mb-6 text-indigo-300">Community Hero Dashboard</h2>
             {/* Profile Info */}
             <div className="rounded-lg p-4 md:p-6 shadow-md mb-8 border border-purple-500">
               <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
                 <img
-                  src={teacherData.profileImg}
+                  src={user?.imageUrl}
                   alt="Profile"
                   className="w-24 h-24 rounded-full border border-purple-500"
                 />
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold text-indigo-300">{teacherData.name}</h3>
-                  <p className="text-indigo-400 mb-2">{teacherData.email}</p>
+                  <h3 className="text-xl font-bold text-indigo-300">{user?.firstName}</h3>
+                  <p className="text-indigo-400 mb-2">{user?.primaryEmailAddress?.emailAddress}</p>
                   <p className="text-indigo-300"><span className="text-indigo-400">Skills:</span> {teacherData.skills}</p>
-                  <p className="text-indigo-300"><span className="text-indigo-400">Member since:</span> {teacherData.joinedDate}</p>
+                  <p className="text-indigo-300"><span className="text-indigo-400">Member since:</span> {user?.createdAt?.getFullYear()}</p>
 
-                  <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {["Rating", "Students", "Total Sessions", "Coins Earned"].map((label, i) => (
-                      <div key={label} className="p-3 rounded-md text-center border border-purple-500">
-                        <p className="text-2xl font-bold text-indigo-300">
-                          {[teacherData.rating, teacherData.totalStudents, teacherData.totalSessions, teacherData.earnings][i]}
-                        </p>
-                        <p className="text-xs text-indigo-400">{label}</p>
-                      </div>
-                    ))}
-                  </div>
                 </div>
               </div>
             </div>

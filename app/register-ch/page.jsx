@@ -1,17 +1,20 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@clerk/nextjs';
+import { databases, ID } from '@/utils/appwrite';
+import Link from 'next/link';
 
 export default function RegisterToTeach() {
+    const { user } = useUser();
   const [formData, setFormData] = useState({
     name: '',
     url: '',
     skills: [],
-    experience: '',
     description: '',
     reason: ''
   });
-  const [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState(true);
   const [showConfetti, setShowConfetti] = useState(false);
   const [skillInput, setSkillInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,11 +24,41 @@ export default function RegisterToTeach() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    setSubmitted(true);
-    setShowConfetti(true);
+
+    if (!user) {
+      alert('You must be logged in to submit');
+      return;
+    }
+
+
+
+    setLoading(true);
+
+    try {
+      const doc = await databases.createDocument(
+        process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
+        process.env.NEXT_PUBLIC_APPWRITE_COLLECTION_ID,
+        ID.unique(),
+        {
+          userId: user.id,
+          name: formData.name,
+          url: formData.url,
+          skills: formData.skills,
+          reason: formData.reason,
+        }
+      );
+
+      console.log('Success:', doc);
+      setSubmitted(true);
+      setShowConfetti(true);
+    } catch (error) {
+      console.error('Appwrite error:', error);
+      alert('Something went wrong. Please try again.');
+    }
+
+    setLoading(false);
   };
 
   const handleSkillKeyDown = (e) => {
@@ -73,7 +106,7 @@ export default function RegisterToTeach() {
               onClick={() => setSubmitted(false)}
               className="mt-6 bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-500 transition duration-300 ease-in-out transform hover:scale-105"
             >
-              Go to Dashboard
+             <Link href={`/dashboard`}>Go to Dashboard</Link>
             </button>
           </div>
         ) : (
@@ -140,18 +173,6 @@ export default function RegisterToTeach() {
               <p className="text-xs text-indigo-300">Press Enter or comma to add skills</p>
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="experience" className="block text-sm font-medium text-indigo-200">Experience</label>
-              <input
-                id="experience"
-                type="text"
-                name="experience"
-                placeholder="e.g. 2 years, Professional certification"
-                value={formData.experience}
-                onChange={handleChange}
-                className="w-full border border-purple-500 text-indigo-100 rounded-md p-3"
-              />
-            </div>
 
             <div className="space-y-2">
               <label htmlFor="reason" className="block text-sm font-medium text-indigo-200">Why Do You Want to Teach?</label>
