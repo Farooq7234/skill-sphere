@@ -1,144 +1,179 @@
 "use client";
+import React from "react";
+import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
 
-import { useEffect, useRef } from "react";
-import {
-  User,
-  Link,
-  BookOpen,
-  Brain,
-  Users,
-  Award,
-} from "lucide-react";
-
-const TimelineStep = ({ number, title, description, icon, isLast }) => {
-  const stepRef = useRef(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("animate-in");
-          }
-        });
-      },
-      { threshold: 0.3 }
-    );
-
-    if (stepRef.current) observer.observe(stepRef.current);
-    return () => {
-      if (stepRef.current) observer.unobserve(stepRef.current);
-    };
-  }, []);
-
-  return (
-    <div
-      ref={stepRef}
-      className="relative flex opacity-0 translate-y-8 transition-all duration-700 ease-out"
-    >
-      {!isLast && (
-        <div className="absolute top-0 left-6 w-0.5 h-full bg-gradient-to-b from-purple-500 to-blue-500 ml-0.5"></div>
-      )}
-
-      <div className="relative z-10 flex h-14 w-14 items-center justify-center rounded-full bg-slate-800 border border-purple-500 shadow-lg shadow-purple-500/20">
-        {icon}
-      </div>
-
-      <div className="ml-8 pb-16">
-        <div className="flex items-center mb-3">
-          <span className="flex items-center justify-center h-7 w-7 rounded-full bg-blue-500 text-sm font-bold text-white mr-3">
-            {number}
-          </span>
-          <h3 className="text-2xl font-bold text-white">{title}</h3>
+const howItWorksContent = [
+  {
+    title: "Skill Exchange Marketplace",
+    description:
+      "SkillSphere enables users to connect and trade skills in a collaborative marketplace. Whether you're teaching graphic design and learning public speaking, or swapping photography tips for coding lessons, the platform uses intelligent matchmaking to pair learners and mentors effectively.",
+    content: (
+      <div className="h-full w-full p-8 flex flex-col justify-center text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+        <div className="relative z-10">
+          <div className="w-12 h-12 bg-white/20 rounded-xl mb-6 flex items-center justify-center">
+            <span className="text-2xl">📘</span>
+          </div>
+          <h3 className="text-2xl font-bold mb-4">Skill Exchange</h3>
+          <p className="text-white/90 text-base leading-relaxed">
+            Match with mentors or learners, trade skills, and schedule sessions seamlessly.
+          </p>
+          <div className="mt-6 space-y-2">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Intelligent Matching</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Skill Trading</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Session Scheduling</span>
+            </div>
+          </div>
         </div>
-        <p className="text-gray-300 text-lg max-w-lg leading-relaxed">{description}</p>
       </div>
-    </div>
-  );
-};
+    ),
+  },
+  {
+    title: "Personalized Microlearning",
+    description:
+      "Our AI-powered microlearning engine curates short, adaptive lessons tailored to each user's skill goals and learning pace. By analyzing your progress and interests, SkillSphere delivers focused, modular content that evolves with you.",
+    content: (
+      <div className="h-full w-full p-8 flex flex-col justify-center text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+        <div className="relative z-10">
+          <div className="w-12 h-12 bg-white/20 rounded-xl mb-6 flex items-center justify-center">
+            <span className="text-2xl">🧠</span>
+          </div>
+          <h3 className="text-2xl font-bold mb-4">AI Microlearning</h3>
+          <p className="text-white/90 text-base leading-relaxed">
+            Adaptive lessons keep your progress on track, whether you're reviewing basics or mastering advanced concepts.
+          </p>
+          <div className="mt-6 space-y-2">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">AI-Powered Curation</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Adaptive Learning</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Progress Tracking</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    title: "Interactive Simulations",
+    description:
+      "SkillSphere brings learning to life through scenario-based simulations powered by AI. Practice soft skills like negotiation, leadership, and communication in immersive, roleplay-like environments with real-time feedback and gamified challenges.",
+    content: (
+      <div className="h-full w-full p-8 flex flex-col justify-center text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+        <div className="relative z-10">
+          <div className="w-12 h-12 bg-white/20 rounded-xl mb-6 flex items-center justify-center">
+            <span className="text-2xl">🎮</span>
+          </div>
+          <h3 className="text-2xl font-bold mb-4">Real-world Scenarios</h3>
+          <p className="text-white/90 text-base leading-relaxed">
+            Experience learning through simulations and get instant feedback.
+          </p>
+          <div className="mt-6 space-y-2">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Scenario-Based Learning</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Real-time Feedback</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Gamified Challenges</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    title: "Community Collaboration",
+    description:
+      "SkillSphere fosters a community where users share insights, collaborate on projects, and support each other. Participate in events, workshops, or explore peer-made tutorials to grow together.",
+    content: (
+      <div className="h-full w-full p-8 flex flex-col justify-center text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+        <div className="relative z-10">
+          <div className="w-12 h-12 bg-white/20 rounded-xl mb-6 flex items-center justify-center">
+            <span className="text-2xl">🤝</span>
+          </div>
+          <h3 className="text-2xl font-bold mb-4">Connect & Collaborate</h3>
+          <p className="text-white/90 text-base leading-relaxed">
+            Learn and grow together with events, projects, and community knowledge.
+          </p>
+          <div className="mt-6 space-y-2">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Community Events</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Project Collaboration</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Peer Tutorials</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+  {
+    title: "Recognition & Trust",
+    description:
+      "Earn badges, endorsements, and verified certificates that validate your learning and teaching. Build trust and showcase your evolving skillset within the platform.",
+    content: (
+      <div className="h-full w-full p-8 flex flex-col justify-center text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
+        <div className="relative z-10">
+          <div className="w-12 h-12 bg-white/20 rounded-xl mb-6 flex items-center justify-center">
+            <span className="text-2xl">🏅</span>
+          </div>
+          <h3 className="text-2xl font-bold mb-4">Earn & Showcase</h3>
+          <p className="text-white/90 text-base leading-relaxed">
+            Gain credibility with recognitions and build your learning profile.
+          </p>
+          <div className="mt-6 space-y-2">
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Verified Badges</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Peer Endorsements</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Skill Certificates</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    ),
+  },
+];
 
 const HowItWorks = () => {
-  const steps = [
-    {
-      number: 1,
-      title: "Sign Up & Create Your Profile",
-      description:
-        'Join SkillSphere by signing up and setting up your profile. List the skills you can teach and the ones you want to learn. 🪪 "Your learning journey starts with your unique skill identity."',
-      icon: <User className="h-7 w-7 text-purple-400" />,
-    },
-    {
-      number: 2,
-      title: "Get Matched with a Skill Partner",
-      description:
-        'Our AI-powered algorithm connects you with users who want to learn what you can teach—and vice versa. 🔗 "Teach guitar, learn coding. It\'s skill-sharing made smart."',
-      icon: <Link className="h-7 w-7 text-purple-400" />,
-    },
-    {
-      number: 3,
-      title: "Start Learning Through Micro-Courses",
-      description:
-        'Access AI-personalized microlearning modules designed for your goals and current skill level. 📘 "Never too much, never too little—just what you need."',
-      icon: <BookOpen className="h-7 w-7 text-purple-400" />,
-    },
-    {
-      number: 4,
-      title: "Practice with Simulations",
-      description:
-        'Hone your soft skills like communication, leadership, and negotiation through realistic, AI-driven simulations. 🎭 "Practice makes perfect—with AI as your coach."',
-      icon: <Brain className="h-7 w-7 text-purple-400" />,
-    },
-    {
-      number: 5,
-      title: "Collaborate and Share Knowledge",
-      description:
-        'Join the community: ask questions, share insights, and participate in events. 🌐 "Grow together by giving back."',
-      icon: <Users className="h-7 w-7 text-purple-400" />,
-    },
-    {
-      number: 6,
-      title: "Earn Badges and Build Your Reputation",
-      description:
-        'Complete challenges, get endorsements, and earn verified skill certificates. 🏆 "Recognition that grows with you."',
-      icon: <Award className="h-7 w-7 text-purple-400" />,
-    },
-  ];
-
   return (
-    <section id="how-it-works" className="py-24 bg-slate-900 relative">
-      {/* Background */}
-      <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-slate-900 to-transparent"></div>
-      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-slate-900 to-transparent"></div>
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute left-1/3 top-1/4 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl"></div>
-        <div className="absolute right-1/4 bottom-1/4 w-80 h-80 bg-blue-600/20 rounded-full blur-3xl"></div>
-      </div>
-
-      <div className="container mx-auto px-6 lg:px-8 relative z-10">
-        <div className="text-center mb-20">
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">
-              How It Works
-            </span>
-          </h2>
-          <p className="text-gray-300 text-xl max-w-3xl mx-auto">
-            SkillSphere is your AI-powered skill exchange ecosystem. Learn,
-            teach, and evolve with a guided, engaging process.
-          </p>
-        </div>
-
-        <div className="max-w-4xl mx-auto">
-          {steps.map((step, index) => (
-            <TimelineStep
-              key={index}
-              number={step.number}
-              title={step.title}
-              description={step.description}
-              icon={step.icon}
-              isLast={index === steps.length - 1}
-            />
-          ))}
-        </div>
-      </div>
+    <section className="w-full min-h-screen bg-slate-900">
+      <StickyScroll content={howItWorksContent} />
     </section>
   );
 };
