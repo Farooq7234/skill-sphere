@@ -21,10 +21,6 @@ const howItWorksContent = [
           <div className="mt-6 space-y-2">
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Intelligent Matching</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
               <span className="text-sm text-white/80">Skill Trading</span>
             </div>
             <div className="flex items-center space-x-2">
@@ -39,7 +35,7 @@ const howItWorksContent = [
   {
     title: "Personalized Microlearning",
     description:
-      "Our AI-powered microlearning engine curates short, adaptive lessons tailored to each user's skill goals and learning pace. By analyzing your progress and interests, SkillSphere delivers focused, modular content that evolves with you.",
+      "By analyzing your progress and interests, SkillSphere delivers focused, modular content that evolves with you.",
     content: (
       <div className="h-full w-full p-8 flex flex-col justify-center text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
@@ -47,15 +43,11 @@ const howItWorksContent = [
           <div className="w-12 h-12 bg-white/20 rounded-xl mb-6 flex items-center justify-center">
             <span className="text-2xl">🧠</span>
           </div>
-          <h3 className="text-2xl font-bold mb-4">AI Microlearning</h3>
+          <h3 className="text-2xl font-bold mb-4">Microlearning</h3>
           <p className="text-white/90 text-base leading-relaxed">
             Adaptive lessons keep your progress on track, whether you're reviewing basics or mastering advanced concepts.
           </p>
           <div className="mt-6 space-y-2">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">AI-Powered Curation</span>
-            </div>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
               <span className="text-sm text-white/80">Adaptive Learning</span>
@@ -72,7 +64,7 @@ const howItWorksContent = [
   {
     title: "Interactive Simulations",
     description:
-      "SkillSphere brings learning to life through scenario-based simulations powered by AI. Practice soft skills like negotiation, leadership, and communication in immersive, roleplay-like environments with real-time feedback and gamified challenges.",
+      "Practice soft skills like negotiation, leadership, and communication in immersive, roleplay-like environments with real-time feedback and gamified challenges.",
     content: (
       <div className="h-full w-full p-8 flex flex-col justify-center text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
@@ -138,7 +130,7 @@ const howItWorksContent = [
   {
     title: "Recognition & Trust",
     description:
-      "Earn badges, endorsements, and verified certificates that validate your learning and teaching. Build trust and showcase your evolving skillset within the platform.",
+      "Build trust and showcase your evolving skillset within the platform.",
     content: (
       <div className="h-full w-full p-8 flex flex-col justify-center text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
@@ -151,10 +143,6 @@ const howItWorksContent = [
             Gain credibility with recognitions and build your learning profile.
           </p>
           <div className="mt-6 space-y-2">
-            <div className="flex items-center space-x-2">
-              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Verified Badges</span>
-            </div>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
               <span className="text-sm text-white/80">Peer Endorsements</span>

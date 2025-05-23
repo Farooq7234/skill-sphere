@@ -4,9 +4,16 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { databases, ID } from '../../utils/appwrite';
 import Link from 'next/link';
+import { 
+  User, 
+  Link as LinkIcon, 
+  Tag,
+  FileText,
+  X
+} from 'lucide-react';
 
 export default function RegisterToTeach() {
-    const { user } = useUser();
+  const { user } = useUser();
   const [formData, setFormData] = useState({
     name: '',
     url: '',
@@ -14,7 +21,7 @@ export default function RegisterToTeach() {
     description: '',
     reason: ''
   });
-  const [submitted, setSubmitted] = useState(true);
+  const [submitted, setSubmitted] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [skillInput, setSkillInput] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,8 +38,6 @@ export default function RegisterToTeach() {
       alert('You must be logged in to submit');
       return;
     }
-
-
 
     setLoading(true);
 
@@ -89,76 +94,98 @@ export default function RegisterToTeach() {
   }, [showConfetti]);
 
   return (
-    <div className="min-h-screen p-6 relative overflow-hidden py-20">
+    <div className="min-h-screen bg-slate-900 py-8 px-4 sm:px-6 lg:px-8">
       {showConfetti && <Confetti />}
 
-      <div className="max-w-xl mx-auto relative z-10">
+      <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-indigo-300">Register to Teach on SkillSphere</h1>
-          <p className="text-indigo-200 mt-2">Share your expertise and inspire others</p>
+          <h1 className="text-3xl font-bold text-white">Register to Teach on SkillSphere</h1>
+          <p className="text-gray-400 mt-2">Share your expertise and inspire others</p>
         </div>
 
         {submitted ? (
-          <div className="bg-indigo-900 p-8 rounded-lg shadow-md text-center border border-indigo-500">
-            <div className="text-2xl font-bold text-indigo-300 mb-4">Thank you for registering! 🎉</div>
-            <p className="text-indigo-100">We're excited to have you join our community of educators at SkillSphere.</p>
+          <div className="bg-slate-800 rounded-2xl border border-slate-700 shadow-2xl p-8 text-center">
+            <div className="text-2xl font-bold text-white mb-4">Thank you for registering! 🎉</div>
+            <p className="text-gray-300 mb-6">We're excited to have you join our community of educators at SkillSphere.</p>
             <button 
-              onClick={() => setSubmitted(false)}
-              className="mt-6 bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-500 transition duration-300 ease-in-out transform hover:scale-105"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
             >
-             <Link href={`/dashboard`}>Go to Dashboard</Link>
+              <Link href={`/dashboard`}>Go to Dashboard</Link>
             </button>
           </div>
         ) : (
-          <div className=" bg-opacity-80 p-8 rounded-lg shadow-md space-y-5 border border-indigo-500">
-            <div className="space-y-2">
-              <label htmlFor="name" className="block text-sm font-medium text-indigo-200">Full Name</label>
-              <input
-                id="name"
-                type="text"
-                name="name"
-                placeholder="Your name"
-                value={formData.name}
-                onChange={handleChange}
-                className="w-full border border-purple-500 text-indigo-100 rounded-md p-3"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="url" className="block text-sm font-medium text-indigo-200">Url</label>
-              <input
-                id="url"
-                type="url"
-                name="url"
-                placeholder="Short intro about your expertise"
-                value={formData.url}
-                onChange={handleChange}
-                className="w-full border border-purple-500 text-indigo-100 rounded-md p-3"
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="skills" className="block text-sm font-medium text-indigo-200">Skills You Want to Teach</label>
-
-              <div className="flex flex-wrap gap-2 mb-2">
-                {formData.skills.map((skill, index) => (
-                  <span
-                    key={index}
-                    className="flex items-center  text-white px-3 py-1 rounded-full text-sm"
-                  >
-                    {skill}
-                    <button
-                      type="button"
-                      onClick={() => removeSkill(index)}
-                      className="ml-2 text-white hover:text-gray-300 focus:outline-none"
-                    >
-                      &times;
-                    </button>
-                  </span>
-                ))}
+          <form onSubmit={handleSubmit} className="bg-slate-800 rounded-2xl border border-slate-700 shadow-2xl p-8 space-y-6">
+            {/* Name Field */}
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-white mb-2">
+                Full Name *
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  placeholder="Your name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-lg bg-slate-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  required
+                />
               </div>
+            </div>
+
+            {/* URL Field */}
+            <div>
+              <label htmlFor="url" className="block text-sm font-medium text-white mb-2">
+                Video URL *
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <LinkIcon className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="url"
+                  type="url"
+                  name="url"
+                  placeholder="Share about your expertise"
+                  value={formData.url}
+                  onChange={handleChange}
+                  className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-lg bg-slate-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Skills Field */}
+            <div>
+              <label htmlFor="skills" className="block text-sm font-medium text-white mb-2">
+                Skills You Want to Teach *
+              </label>
+
+              {/* Display added skills */}
+              {formData.skills.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-3">
+                  {formData.skills.map((skill, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center text-sm px-3 py-1 text-white bg-green-500 rounded-full"
+                    >
+                      <Tag className="h-3 w-3 mr-1" />
+                      {skill}
+                      <button
+                        type="button"
+                        onClick={() => removeSkill(index)}
+                        className="ml-2 text-white hover:text-gray-300 focus:outline-none"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
 
               <input
                 id="skills"
@@ -168,32 +195,48 @@ export default function RegisterToTeach() {
                 value={skillInput}
                 onChange={(e) => setSkillInput(e.target.value)}
                 onKeyDown={handleSkillKeyDown}
-                className="w-full border border-purple-500 text-indigo-100  rounded-md p-3"
+                className="block w-full px-3 py-3 border border-slate-700 rounded-lg bg-slate-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               />
-              <p className="text-xs text-indigo-300">Press Enter or comma to add skills</p>
+              <p className="text-xs text-gray-400 mt-1">Press Enter or comma to add skills</p>
             </div>
 
-
-            <div className="space-y-2">
-              <label htmlFor="reason" className="block text-sm font-medium text-indigo-200">Why Do You Want to Teach?</label>
-              <textarea
-                id="reason"
-                name="reason"
-                placeholder="Share your passion for teaching"
-                value={formData.reason}
-                onChange={handleChange}
-                className="w-full border border-purple-500 text-indigo-100 rounded-md p-3"
-                rows={2}
-              />
+            {/* Reason Field */}
+            <div>
+              <label htmlFor="reason" className="block text-sm font-medium text-white mb-2">
+                Why Do You Want to Teach?
+              </label>
+              <div className="relative">
+                <div className="absolute top-3 left-3 pointer-events-none">
+                  <FileText className="h-5 w-5 text-gray-400" />
+                </div>
+                <textarea
+                  id="reason"
+                  name="reason"
+                  placeholder="Share your passion for teaching"
+                  value={formData.reason}
+                  onChange={handleChange}
+                  className="block w-full pl-10 pr-3 py-3 border border-slate-700 rounded-lg bg-slate-700 text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none"
+                  rows={3}
+                />
+              </div>
             </div>
 
+            {/* Submit Button */}
             <button 
-              onClick={handleSubmit}
-              className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-md hover:bg-indigo-400 transition duration-300 ease-in-out transform hover:scale-105"
+              type="submit"
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
             >
-              Submit Application
+              {loading ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Submitting Application...
+                </>
+              ) : (
+                'Submit Application'
+              )}
             </button>
-          </div>
+          </form>
         )}
       </div>
     </div>
@@ -209,7 +252,7 @@ function Confetti() {
     const animationDuration = (Math.random() * 2) + 3;
     const animationDelay = Math.random() * 0.5;
 
-    const colors = ['bg-red-500', 'bg-yellow-400', 'bg-blue-400', 'bg-green-400', 'bg-indigo-300'];
+    const colors = ['bg-red-500', 'bg-yellow-400', 'bg-blue-400', 'bg-green-400', 'bg-purple-500'];
     const color = colors[Math.floor(Math.random() * colors.length)];
 
     pieces.push(

@@ -83,6 +83,15 @@ export const StickyScroll = ({ content, contentClassName }) => {
       transition={{ duration: 0.6, ease: "easeInOut" }}
       className="relative min-h-screen w-full overflow-hidden"
     >
+
+       {/* Heading outside scroll area */}
+  <div className="pt-20 pb-10 text-center">
+    <h2 className="text-3xl md:text-4xl font-bold">
+      <span className="bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">
+        How It Works
+      </span>
+    </h2>
+  </div>
       <div className="sticky top-0 min-h-screen w-full flex items-center justify-center px-4 py-20">
         <div className="flex w-full max-w-7xl gap-16 items-start">
           {/* Left scrollable text */}
