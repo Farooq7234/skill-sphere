@@ -468,6 +468,7 @@ useEffect(() => {
       <div className="max-w-7xl mx-auto ">
          <h1 className="text-3xl font-bold text-white mb-8 mt-10">Sessions</h1>
          <Link href="/register-ch" className="text-sm text-white px-2 py-3 rounded-xl font-semibold bg-green-500 ">Become a Community Hero</Link>
+         <Link href="/dashboard" className="text-sm text-white px-2 py-3 rounded-xl font-semibold bg-blue-500 ">Go to Dashboard</Link>
 
         {/* Search & Filter Bar */}
         <div className="flex flex-col sm:flex-row gap-4 mt-5 mb-8">

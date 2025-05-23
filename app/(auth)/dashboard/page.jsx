@@ -361,6 +361,10 @@ export default function TeacherDashboard() {
             <div className="mb-8">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
                 <h3 className="text-2xl font-bold text-white">Upcoming Sessions</h3>
+                <div className="flex justify-center items-center">
+                  <Link href="/sessions" className="text-gray-300 hover:text-white px-4 py-2  mr-10 text-sm font-medium border border-purple-500 rounded-md hover:bg-purple-500/20 transition-all duration-300">
+                   Go to Sessions
+              </Link>
                 <button
                   onClick={() => setActiveTab("sessions")}
                   className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors"
@@ -368,6 +372,7 @@ export default function TeacherDashboard() {
                   <Plus className="h-5 w-5" />
                   Create New Session
                 </button>
+                </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -574,9 +579,7 @@ export default function TeacherDashboard() {
               </div>
 
               {/* Submit Button */}
-              <Link href="/sessions" className="text-gray-300 hover:text-white px-4 py-2  mr-10 text-sm font-medium border border-purple-500 rounded-md hover:bg-purple-500/20 transition-all duration-300">
-                   Go to Sessions
-              </Link>
+              
               <button
                 onClick={handleCreateSession}
                 className="w-full p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
