@@ -4,28 +4,32 @@ import { StickyScroll } from "../components/ui/sticky-scroll-reveal";
 
 const howItWorksContent = [
   {
-    title: "Skill Exchange Marketplace",
+    title: "Real-Time Skill Exchange",
     description:
-      "SkillSphere enables users to connect and trade skills in a collaborative marketplace. Whether you're teaching graphic design and learning public speaking, or swapping photography tips for coding lessons, the platform uses intelligent matchmaking to pair learners and mentors effectively.",
+      "SkillSphere connects learners and mentors for live, interactive sessions. The platform empowers users to exchange skills in real time — from coding help and design reviews to GATE prep and lab walkthroughs.",
     content: (
       <div className="h-full w-full p-8 flex flex-col justify-center text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
         <div className="relative z-10">
           <div className="w-12 h-12 bg-white/20 rounded-xl mb-6 flex items-center justify-center">
-            <span className="text-2xl">📘</span>
+            <span className="text-2xl">🔄</span>
           </div>
-          <h3 className="text-2xl font-bold mb-4">Skill Exchange</h3>
+          <h3 className="text-2xl font-bold mb-4">Live Skill Sharing</h3>
           <p className="text-white/90 text-base leading-relaxed">
-            Match with mentors or learners, trade skills, and schedule sessions seamlessly.
+            Engage in real-time sessions with mentors or peers for dynamic learning.
           </p>
           <div className="mt-6 space-y-2">
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Skill Trading</span>
+              <span className="text-sm text-white/80">Interactive Sessions</span>
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Session Scheduling</span>
+              <span className="text-sm text-white/80">Peer Mentorship</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Skill Discovery</span>
             </div>
           </div>
         </div>
@@ -33,28 +37,32 @@ const howItWorksContent = [
     ),
   },
   {
-    title: "Personalized Microlearning",
+    title: "Microlearning Modules",
     description:
-      "By analyzing your progress and interests, SkillSphere delivers focused, modular content that evolves with you.",
+      "Short, focused learning bursts tailored to user-defined skills make growth manageable and sustainable. Learn or mentor through bite-sized, live interactions anytime.",
     content: (
       <div className="h-full w-full p-8 flex flex-col justify-center text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
         <div className="relative z-10">
           <div className="w-12 h-12 bg-white/20 rounded-xl mb-6 flex items-center justify-center">
-            <span className="text-2xl">🧠</span>
+            <span className="text-2xl">⚡</span>
           </div>
-          <h3 className="text-2xl font-bold mb-4">Microlearning</h3>
+          <h3 className="text-2xl font-bold mb-4">Live Microlearning</h3>
           <p className="text-white/90 text-base leading-relaxed">
-            Adaptive lessons keep your progress on track, whether you're reviewing basics or mastering advanced concepts.
+            Learn quickly with focused, live learning sessions based on your goals.
           </p>
           <div className="mt-6 space-y-2">
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Adaptive Learning</span>
+              <span className="text-sm text-white/80">Short Sessions</span>
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Progress Tracking</span>
+              <span className="text-sm text-white/80">Goal-Oriented Learning</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Real-Time Feedback</span>
             </div>
           </div>
         </div>
@@ -62,32 +70,32 @@ const howItWorksContent = [
     ),
   },
   {
-    title: "Interactive Simulations",
+    title: "Collaborative Community",
     description:
-      "Practice soft skills like negotiation, leadership, and communication in immersive, roleplay-like environments with real-time feedback and gamified challenges.",
+      "Join a growing community of learners and mentors. Share tutorials, join workshops, or co-host sessions — learning becomes a shared journey.",
     content: (
       <div className="h-full w-full p-8 flex flex-col justify-center text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
         <div className="relative z-10">
           <div className="w-12 h-12 bg-white/20 rounded-xl mb-6 flex items-center justify-center">
-            <span className="text-2xl">🎮</span>
+            <span className="text-2xl">🌐</span>
           </div>
-          <h3 className="text-2xl font-bold mb-4">Real-world Scenarios</h3>
+          <h3 className="text-2xl font-bold mb-4">Community Learning</h3>
           <p className="text-white/90 text-base leading-relaxed">
-            Experience learning through simulations and get instant feedback.
+            Share skills, host events, and collaborate on your learning journey.
           </p>
           <div className="mt-6 space-y-2">
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Scenario-Based Learning</span>
+              <span className="text-sm text-white/80">Workshops & Events</span>
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Real-time Feedback</span>
+              <span className="text-sm text-white/80">Peer Collaboration</span>
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Gamified Challenges</span>
+              <span className="text-sm text-white/80">Shared Tutorials</span>
             </div>
           </div>
         </div>
@@ -95,32 +103,32 @@ const howItWorksContent = [
     ),
   },
   {
-    title: "Community Collaboration",
+    title: "Flexible & Secure Platform",
     description:
-      "SkillSphere fosters a community where users share insights, collaborate on projects, and support each other. Participate in events, workshops, or explore peer-made tutorials to grow together.",
+      "SkillSphere is built on a robust stack: secure login via Clerk, scalable sessions via Appwrite, and beautiful interfaces powered by Next.js and Tailwind CSS. All with full CRUD support.",
     content: (
       <div className="h-full w-full p-8 flex flex-col justify-center text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
         <div className="relative z-10">
           <div className="w-12 h-12 bg-white/20 rounded-xl mb-6 flex items-center justify-center">
-            <span className="text-2xl">🤝</span>
+            <span className="text-2xl">🛠️</span>
           </div>
-          <h3 className="text-2xl font-bold mb-4">Connect & Collaborate</h3>
+          <h3 className="text-2xl font-bold mb-4">Seamless Experience</h3>
           <p className="text-white/90 text-base leading-relaxed">
-            Learn and grow together with events, projects, and community knowledge.
+            Enjoy fast, secure, and role-based access across a full-stack environment.
           </p>
           <div className="mt-6 space-y-2">
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Community Events</span>
+              <span className="text-sm text-white/80">Role-Based Access</span>
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Project Collaboration</span>
+              <span className="text-sm text-white/80">Full CRUD Support</span>
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Peer Tutorials</span>
+              <span className="text-sm text-white/80">Cloud-Hosted UI</span>
             </div>
           </div>
         </div>
@@ -128,28 +136,32 @@ const howItWorksContent = [
     ),
   },
   {
-    title: "Recognition & Trust",
+    title: "Recognize & Reward Growth",
     description:
-      "Build trust and showcase your evolving skillset within the platform.",
+      "Earn badges, endorsements, and certificates as you grow. A leaderboard celebrates top mentors, and future rewards include payment-based incentives.",
     content: (
       <div className="h-full w-full p-8 flex flex-col justify-center text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent"></div>
         <div className="relative z-10">
           <div className="w-12 h-12 bg-white/20 rounded-xl mb-6 flex items-center justify-center">
-            <span className="text-2xl">🏅</span>
+            <span className="text-2xl">🏆</span>
           </div>
-          <h3 className="text-2xl font-bold mb-4">Earn & Showcase</h3>
+          <h3 className="text-2xl font-bold mb-4">Recognition & Rewards</h3>
           <p className="text-white/90 text-base leading-relaxed">
-            Gain credibility with recognitions and build your learning profile.
+            Earn badges, certificates, and visibility as you mentor and learn.
           </p>
           <div className="mt-6 space-y-2">
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Peer Endorsements</span>
+              <span className="text-sm text-white/80">Verified Badges</span>
             </div>
             <div className="flex items-center space-x-2">
               <div className="w-2 h-2 bg-white/60 rounded-full"></div>
-              <span className="text-sm text-white/80">Skill Certificates</span>
+              <span className="text-sm text-white/80">Mentor Leaderboard</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className="w-2 h-2 bg-white/60 rounded-full"></div>
+              <span className="text-sm text-white/80">Certificates & Rewards</span>
             </div>
           </div>
         </div>
