@@ -4,6 +4,7 @@ import { useState ,useEffect} from "react";
 import { LogOut, Menu, X, Calendar, Edit, User, Plus, Tag, Trash2,Link2 } from 'lucide-react';
 import { SignOutButton, useUser } from "@clerk/nextjs";
 import { databases, ID, storage } from "../../../utils/appwrite";
+import Link from "next/link";
 
 const teacherData = {
   name: "John Doe",
@@ -573,6 +574,9 @@ export default function TeacherDashboard() {
               </div>
 
               {/* Submit Button */}
+              <Link href="/sessions" className="text-gray-300 hover:text-white px-4 py-2  mr-10 text-sm font-medium border border-purple-500 rounded-md hover:bg-purple-500/20 transition-all duration-300">
+                   Go to Sessions
+              </Link>
               <button
                 onClick={handleCreateSession}
                 className="w-full p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
