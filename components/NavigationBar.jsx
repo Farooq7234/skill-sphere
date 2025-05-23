@@ -57,6 +57,9 @@ const NavigationBar = () => {
 
                 </SignedOut>
                 <SignedIn>
+                  <Link href="/sessions" className="text-gray-300 hover:text-white px-4 py-2  mr-10 text-sm font-medium border border-purple-500 rounded-md hover:bg-purple-500/20 transition-all duration-300">
+                   Go to Sessions
+                  </Link>
                   <UserButton />
                 </SignedIn>
               </div>

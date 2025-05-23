@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { databases, storage } from "../../../utils/appwrite";
 import SessionNavbar from '../../../components/SessionsNavbar'
+import Link from "next/link";
 
 // Session Detail Modal Component
 const SessionDetailModal = ({ session, isOpen, onClose }) => {
@@ -465,10 +466,11 @@ useEffect(() => {
     <div className="min-h-screen bg-slate-900 py-8 px-4 sm:px-6 lg:px-8">
         <SessionNavbar/>
       <div className="max-w-7xl mx-auto ">
-        <h1 className="text-3xl font-bold text-white mb-8 mt-10">Sessions</h1>
-        
+         <h1 className="text-3xl font-bold text-white mb-8 mt-10">Sessions</h1>
+         <Link href="/register-ch" className="text-sm text-white px-2 py-3 rounded-xl font-semibold bg-green-500 ">Become a Community Hero</Link>
+
         {/* Search & Filter Bar */}
-        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row gap-4 mt-5 mb-8">
           <div className="flex-1 relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-gray-400" />
